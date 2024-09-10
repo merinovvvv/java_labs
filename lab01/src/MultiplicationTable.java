@@ -1,4 +1,4 @@
-public class Main {
+public class MultiplicationTable {
     public static void main(String[] args) {
         makeTable();
     }
