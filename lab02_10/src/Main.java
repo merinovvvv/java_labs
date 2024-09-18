@@ -11,10 +11,15 @@ public class Main {
         }
     }
 
-    public static StringBuffer removeSpaces(String arg) {
+    public static StringBuffer removeSpaces(String arg) throws MyException{
         StringBuffer str = new StringBuffer(arg);
-        while (str.charAt(0) == ' ') {
+
+        while (!str.isEmpty() && str.charAt(0) == ' ') {
             str.deleteCharAt(0);
+        }
+
+        if (str.isEmpty()) {
+            throw new MyException("");
         }
 
         for (int i = str.length() - 1; str.charAt(i) == ' '; i--) {
