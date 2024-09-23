@@ -5,28 +5,52 @@ import java.util.Scanner;
 public class Main {
     public static void main (String[] args) {
         try {
-            int[][] matrix = getMatrix();
+            double[][] matrix = getMatrix();
             calcMatrix(matrix);
         } catch (MyException | FileNotFoundException e) {
             System.out.println(e.getMessage());
         }
     }
 
-    static int[][] getMatrix() throws MyException, FileNotFoundException {
+    static double[][] getMatrix() throws MyException, FileNotFoundException {
         Scanner sc = new Scanner(new File("matrix.txt"));
-        int rows = sc.nextInt();
-        int cols = sc.nextInt();
 
-        int[][] matrix = new int[rows][cols];
+        if (!sc.hasNext()) {
+            throw new MyException("Not enough elements.");
+        }
+        if (!sc.hasNextInt()) {
+            throw new MyException("Incorrect number for rows.");
+        }
+        int rows = sc.nextInt();
+        if (rows == 0) {
+            throw new MyException("Rows number is 0.");
+        }
+
+        if (!sc.hasNext()) {
+            throw new MyException("Not enough elements.");
+        }
+        if (!sc.hasNextInt()) {
+            throw new MyException("Incorrect number for cols.");
+        }
+        int cols = sc.nextInt();
+        if (cols == 0) {
+            throw new MyException("Cols number is 0.");
+        }
+
+        if (cols - rows != 1 || rows >= cols) {
+            throw new MyException("The matrix is not square");
+        }
+
+        double[][] matrix = new double[rows][cols];
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
                 if (!sc.hasNext()) {
                     throw new MyException("Not enough elements.");
                 } else {
-                    if (!sc.hasNextInt()) {
+                    if (!sc.hasNextFloat()) {
                         throw new MyException("Not a number in matrix.");
                     } else {
-                        matrix[i][j] = sc.nextInt();
+                        matrix[i][j] = sc.nextFloat();
                     }
                 }
             }
@@ -37,38 +61,55 @@ public class Main {
         return matrix;
     }
 
-    static void calcMatrix(int[][] matrix) throws MyException{
-        int headPos = 0;
-        int k = 1;
-        for (int i = 1; i < matrix.length; i++) {
-            int head = matrix[i][headPos];
-            if (matrix[i][i] == 0) {
-                throw new MyException("Determinant equals to 0.");
+    static void calcMatrix(double[][] matrix) throws MyException {
+        int n = matrix.length;
+
+        for (int k = 0; k < n; k++) {
+            if (matrix[k][k] == 0) {
+
+                boolean swapped = false;
+                for (int i = k + 1; i < n; i++) {
+                    if (matrix[i][k] != 0) {
+                        double[] temp = matrix[k];
+                        matrix[k] = matrix[i];
+                        matrix[i] = temp;
+                        swapped = true;
+                        break;
+                    }
+                }
+                if (!swapped) {
+                    throw new MyException("There is no solution or infinitely many solutions");
+                }
             }
-            for (int j = headPos; j < matrix[i].length; j++) {
-                matrix[i][j] -= matrix[i - k][j] * (head / matrix[i - k][headPos]);
-            }
-            if (matrix[i][i - 1] != 0) {
-                headPos++;
-                k--;
-                i--;
-            } else {
-                k++;
+
+            for (int i = k + 1; i < n; i++) {
+                if (matrix[i][k] != 0) {
+                    double coeff = matrix[i][k] / matrix[k][k];
+                    for (int j = k; j <= n; j++) {
+                        matrix[i][j] -= coeff * matrix[k][j];
+                    }
+                }
             }
         }
 
-        int[] solution = new int[matrix.length];
-
-        for (int i = matrix.length - 1; i >= 0; i--) {
-            int sum = matrix[i][matrix.length];
-            for (int j = i + 1; j < matrix.length; j++) {
+        double[] solution = new double[n];
+        for (int i = n - 1; i >= 0; i--) {
+            double sum = matrix[i][n];
+            for (int j = i + 1; j < n; j++) {
                 sum -= matrix[i][j] * solution[j];
             }
             if (matrix[i][i] == 0) {
                 System.out.println("Нет решения или бесконечно много решений");
                 return;
             }
-            solution[i] = sum / matrix[i][i];
+            double epsilon = 1e-6;
+            double a = Math.abs(Math.round(sum / matrix[i][i]));
+            double b = sum / matrix[i][i];
+            if (a - b < epsilon) {
+                solution[i] = Math.round(sum / matrix[i][i]);
+            } else {
+                solution[i] = sum / matrix[i][i];
+            }
         }
 
         System.out.println("Решение системы:");
