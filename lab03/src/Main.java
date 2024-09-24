@@ -63,6 +63,7 @@ public class Main {
 
     static void calcMatrix(double[][] matrix) throws MyException {
         int n = matrix.length;
+        double epsilon = 1e-6;
 
         for (int k = 0; k < n; k++) {
             if (matrix[k][k] == 0) {
@@ -87,6 +88,9 @@ public class Main {
                     double coeff = matrix[i][k] / matrix[k][k];
                     for (int j = k; j <= n; j++) {
                         matrix[i][j] -= coeff * matrix[k][j];
+                        if (Math.abs(matrix[i][j]) < epsilon) {
+                            matrix[i][j] = 0;
+                        }
                     }
                 }
             }
@@ -102,14 +106,7 @@ public class Main {
                 System.out.println("Нет решения или бесконечно много решений");
                 return;
             }
-            double epsilon = 1e-6;
-            double a = Math.abs(Math.round(sum / matrix[i][i]));
-            double b = sum / matrix[i][i];
-            if (a - b < epsilon) {
-                solution[i] = Math.round(sum / matrix[i][i]);
-            } else {
-                solution[i] = sum / matrix[i][i];
-            }
+            solution[i] = Math.round((sum / matrix[i][i]) * (1/epsilon)) / (1/epsilon);
         }
 
         System.out.println("Решение системы:");
