@@ -6,7 +6,8 @@ public class Main {
     public static void main (String[] args) {
         try {
             double[][] matrix = getMatrix();
-            calcMatrix(matrix);
+            double[] solution = calcMatrixSystem(matrix);
+            printSolution(solution);
         } catch (MyException | FileNotFoundException e) {
             System.out.println(e.getMessage());
         }
@@ -61,7 +62,7 @@ public class Main {
         return matrix;
     }
 
-    static void calcMatrix(double[][] matrix) throws MyException {
+    static double[] calcMatrixSystem(double[][] matrix) throws MyException {
         int n = matrix.length;
         double epsilon = 1e-6;
 
@@ -103,12 +104,14 @@ public class Main {
                 sum -= matrix[i][j] * solution[j];
             }
             if (matrix[i][i] == 0) {
-                System.out.println("Нет решения или бесконечно много решений");
-                return;
+                throw new MyException("There is no solution or infinitely many solutions");
             }
-            solution[i] = Math.round((sum / matrix[i][i]) * (1/epsilon)) / (1/epsilon);
+            solution[i] = Math.round((sum / matrix[i][i]) * 10000.0) / 10000.0;
         }
+        return solution;
+    }
 
+    static void printSolution(double[] solution) {
         System.out.println("Решение системы:");
         for (int i = 0; i < solution.length; i++) {
             System.out.println("x" + (i + 1) + " = " + solution[i]);
