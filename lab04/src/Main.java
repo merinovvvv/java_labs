@@ -18,7 +18,7 @@ public class Main {
         tree.inOrderTraversal();
         System.out.println();
 
-        System.out.println(tree.remove(5));
+        tree.remove(5);
         //tree.printBinarySearchTree();
         tree.inOrderTraversal();
         System.out.println();
@@ -41,14 +41,65 @@ public class Main {
 
         //BinarySearchTree with Students
         BinarySearchTree<Student> tree2 = new BinarySearchTree<>();
-        tree2.insert(new Student("Vasya", 5));
-        tree2.insert(new Student("Petya", 3));
-        tree2.insert(new Student("Tolya", 4));
-        tree2.insert(new Student("Kesha", 2));
-        tree2.insert(new Student("Yaroslav", 10));
+
+        Student vasya = new Student("Vasya", 5);
+        Student petya = new Student("Petya", 3);
+        Student tolya = new Student("Tolya", 4);
+        Student kesha = new Student("Kesha", 2);
+        Student maks = new Student("Maks", 9);
+        Student yaroslav = new Student("Yaroslav", 10);
+        tree2.insert(vasya);
+        tree2.insert(petya);
+        tree2.insert(tolya);
+        tree2.insert(kesha);
+        tree2.insert(maks);
+        tree2.insert(yaroslav);
         tree2.inOrderTraversal();
         System.out.println();
         System.out.println();
         System.out.println(tree2);
+
+        tree2.remove(petya);
+        System.out.println();
+        System.out.println();
+        System.out.println(tree2);
+        System.out.println();
+        System.out.println();
+        System.out.println();
+
+        //Another BinarySearchTree with ints
+
+        BinarySearchTree<Integer> tree3 = new BinarySearchTree<>(6);
+        tree3.insert(8);
+        tree3.insert(16);
+        tree3.insert(8);
+        tree3.insert(2);
+        tree3.insert(9);
+        tree3.insert(7);
+        tree3.insert(4);
+        tree3.insert(10);
+        tree3.insert(3);
+        tree3.insert(1);
+        tree3.inOrderTraversal();
+        System.out.println();
+        System.out.println(tree3);
+        tree3.remove(6);
+        tree3.inOrderTraversal();
+        System.out.println();
+        System.out.println(tree3);
+        tree3.remove(2);
+        System.out.println();
+        System.out.println(tree3);
+
+        tree3.remove(8);
+        System.out.println();
+        System.out.println(tree3);
+        System.out.println();
+
+        tree3.inOrderTraversal();
+        System.out.println();
+        tree3.postOrderTraversal();
+        System.out.println();
+        tree3.preOrderTraversal();
     }
 }

@@ -1,6 +1,6 @@
 public class BinarySearchTree <T extends Comparable<T>> {
     class Node {
-        private final T value;
+        private T value;
         private Node left;
         private Node right;
         Node (T value) {
@@ -83,58 +83,41 @@ public class BinarySearchTree <T extends Comparable<T>> {
         }
     }
 
-    public boolean remove(T valueToRemove) {
-        Node currentNode = root;
-        Node parentNode = root;
-        boolean isLeftChild = true;
-        while (currentNode.value.compareTo(valueToRemove) != 0) {
-            parentNode = currentNode;
-            if (currentNode.value.compareTo(valueToRemove) > 0) {
-                isLeftChild = true;
-                currentNode = currentNode.left;
-            } else {
-                isLeftChild = false;
-                currentNode = currentNode.right;
-            }
-            if (currentNode == null) {
-                return false;
-            }
+    //TODO РАЗОБРАТЬСЯ
+    public void remove(T val) {
+        root = removeNode(root, val);
+    }
+    private Node removeNode(Node node, T val) {
+        if (node == null) {
+            return null;
         }
-        if (currentNode.left == null && currentNode.right == null) {
-            if (currentNode == root) {
-                root = null;
-            } else if (isLeftChild) {
-                parentNode.left = null;
-            } else {
-                parentNode.right = null;
-            }
-        } else if (currentNode.right == null) {
-            if (currentNode == root) {
-                root = currentNode.left;
-            } else if (isLeftChild) {
-                parentNode.left = currentNode.left;
-            } else {
-                parentNode.right = currentNode.left;
-            }
-        } else if (currentNode.left == null) {
-            if (currentNode == root) {
-                root = currentNode.right;
-            } else if (isLeftChild) {
-                parentNode.left = currentNode.right;
-            } else {
-                parentNode.right = currentNode.right;
-            }
+
+        int cmp = val.compareTo(node.value);
+
+        if (cmp < 0) {
+            node.left = removeNode(node.left, val);
+        } else if (cmp > 0) {
+            node.right = removeNode(node.right, val);
         } else {
-            Node heir = getHair(currentNode);
-            if (currentNode == root) {
-                root = heir;
-            } else if (isLeftChild) {
-                parentNode.left = heir;
-            } else  {
-                parentNode.right = heir;
+            // Узел найден
+            if (node.left == null) {
+                return node.right;
+            } else if (node.right == null) {
+                return node.left;
             }
+
+            Node minRightSubtree = findMin(node.right);
+            node.value = minRightSubtree.value;
+            node.right = removeNode(node.right, minRightSubtree.value);
         }
-        return true;
+
+        return node;
+    }
+    private Node findMin(Node node) {
+        while (node.left != null) {
+            node = node.left;
+        }
+        return node;
     }
 
     private Node getHair(Node node) {
