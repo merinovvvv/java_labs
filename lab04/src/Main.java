@@ -126,5 +126,18 @@ public class Main {
         System.out.println();
         tree5.remove(104);
         System.out.println(tree5);
+
+        //One more BinarySearchTree
+        BinarySearchTree<Integer> tree6 = new BinarySearchTree<>();
+        tree6.insert(5);
+        tree6.insert(3);
+        tree6.insert(4);
+        tree6.insert(6);
+        tree6.insert(8);
+        System.out.println();
+        System.out.println(tree6);
+        System.out.println();
+        tree6.remove(5);
+        System.out.println(tree6);
     }
 }
