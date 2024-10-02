@@ -101,5 +101,30 @@ public class Main {
         tree3.postOrderTraversal();
         System.out.println();
         tree3.preOrderTraversal();
+
+
+        //empty BinarySearchTree
+        System.out.println();
+        BinarySearchTree<Integer> tree4 = new BinarySearchTree<>();
+        System.out.println(tree4);
+        tree4.preOrderTraversal();
+        tree4.remove(2);
+        System.out.println(tree4);
+
+        //Another BinarySearchTree
+        BinarySearchTree<Integer> tree5 = new BinarySearchTree<>();
+        tree5.insert(52);
+        tree5.insert(50);
+        tree5.insert(51);
+        tree5.insert(104);
+        tree5.insert(100);
+        tree5.insert(208);
+        tree5.insert(200);
+        tree5.insert(198);
+        System.out.println();
+        System.out.println(tree5);
+        System.out.println();
+        tree5.remove(104);
+        System.out.println(tree5);
     }
 }
