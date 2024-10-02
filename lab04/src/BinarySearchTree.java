@@ -83,7 +83,6 @@ public class BinarySearchTree <T extends Comparable<T>> {
         }
     }
 
-    //TODO РАЗОБРАТЬСЯ
     public void remove(T val) {
         root = removeNode(root, val);
     }
@@ -92,14 +91,13 @@ public class BinarySearchTree <T extends Comparable<T>> {
             return null;
         }
 
-        int cmp = val.compareTo(node.value);
+        int res = val.compareTo(node.value);
 
-        if (cmp < 0) {
+        if (res < 0) {
             node.left = removeNode(node.left, val);
-        } else if (cmp > 0) {
+        } else if (res > 0) {
             node.right = removeNode(node.right, val);
         } else {
-            // Узел найден
             if (node.left == null) {
                 return node.right;
             } else if (node.right == null) {
@@ -110,7 +108,6 @@ public class BinarySearchTree <T extends Comparable<T>> {
             node.value = minRightSubtree.value;
             node.right = removeNode(node.right, minRightSubtree.value);
         }
-
         return node;
     }
     private Node findMin(Node node) {
