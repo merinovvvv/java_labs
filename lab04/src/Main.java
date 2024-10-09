@@ -14,6 +14,13 @@ public class Main {
         tree.insert(3);
         tree.insert(1);
 
+        System.out.println(tree);
+
+        tree.remove(8);
+
+        System.out.println();
+        System.out.println(tree);
+
         //tree.printBinarySearchTree();
         tree.inOrderTraversal();
         System.out.println();

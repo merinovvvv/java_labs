@@ -14,11 +14,11 @@ public class Student implements Comparable <Student> {
 
     @Override
     public int compareTo(Student student) {
-        double result = Double.compare(this.averageGrade, student.averageGrade);
+        int result = Double.compare(this.averageGrade, student.averageGrade);
         if (result == 0) {
             return this.name.compareTo(student.name);
         }
-        return (int) result;
+        return result;
     }
 
     @Override
