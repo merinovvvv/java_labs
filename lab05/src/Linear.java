@@ -1,5 +1,5 @@
-public class Liner extends Series {
-    Liner(double firstElement, double step, int numOfElements) {
+public class Linear extends Series {
+    Linear(double firstElement, double step, int numOfElements) {
         super(firstElement, step, numOfElements);
     }
 
