@@ -2,6 +2,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Scanner;
 
 abstract class Series {
     double firstElement;
@@ -12,6 +13,16 @@ abstract class Series {
         this.firstElement = firstElement;
         this.step = step;
         this.numOfElements = numOfElements;
+    }
+
+    public static String readFile(String fileName) throws FileNotFoundException {
+        StringBuilder sb = new StringBuilder();
+        try (Scanner scanner = new Scanner(new File(fileName))) {
+            while (scanner.hasNextLine()) {
+                sb.append(scanner.nextLine()).append("\n");
+            }
+        }
+        return sb.toString();
     }
 
     abstract double jElemCalc(int j);
