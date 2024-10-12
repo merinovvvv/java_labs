@@ -2,6 +2,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 
 public class MyApplication extends JFrame {
     public static void main(String[] args) {
@@ -165,9 +167,12 @@ public class MyApplication extends JFrame {
             }
         });
 
-        numOfElementsTextField.addActionListener(new ActionListener() { //TODO working not only with Enter button
+        numOfElementsTextField.addFocusListener(new FocusListener() {
             @Override
-            public void actionPerformed(ActionEvent actionEvent) {
+            public void focusGained(FocusEvent e) {}
+
+            @Override
+            public void focusLost(FocusEvent focusEvent) {
                 try {
                     int numOfElements = Integer.parseInt(numOfElementsTextField.getText());
                     fillJComboBox(numOfElements);
@@ -178,6 +183,9 @@ public class MyApplication extends JFrame {
                             "Invalid Input", // Title of the dialog
                             JOptionPane.ERROR_MESSAGE // Type of message
                     );
+                    numOfElementsTextField.setText("");
+                    fillJComboBox(0);
+
                 }
             }
         });
@@ -208,7 +216,7 @@ public class MyApplication extends JFrame {
                         } catch (IllegalArgumentException e) {
                             JOptionPane.showMessageDialog(
                                     MyApplication.this, // Parent component
-                                    e.getMessage(), // Message to display
+                                    "At least one of the fields \"first number\", \"step\" or \"number of elements\" has invalid type!", // Message to display
                                     "Warning", // Title of the dialog
                                     JOptionPane.WARNING_MESSAGE // Type of message
                             );
@@ -243,6 +251,80 @@ public class MyApplication extends JFrame {
         });
 
         //TODO jElemCalcButton, writeSumToFileButton, writeJElemToFileButton, fileContentsButton
+
+        calcJElemButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+
+                Integer selectedItem = (Integer) jElemComboBox.getSelectedItem();
+                if (selectedItem == null) {
+                    JOptionPane.showMessageDialog(
+                            MyApplication.this, // Parent component
+                            "Index is not selected", // Message to display
+                            "Warning", // Title of the dialog
+                            JOptionPane.WARNING_MESSAGE // Type of message
+                    );
+
+                }
+
+                if (firstElemTextField.getText().isEmpty() || stepTextField.getText().isEmpty() || numOfElementsTextField.getText().isEmpty()) {
+                    JOptionPane.showMessageDialog(
+                            MyApplication.this, // Parent component
+                            "At least one of the fields \"first number\", \"step\" or \"number of elements\" is empty!", // Message to display
+                            "Warning", // Title of the dialog
+                            JOptionPane.WARNING_MESSAGE // Type of message
+                    );
+                } else if (!linerRadioButton.isSelected() && !exponentialRadioButton.isSelected()) {
+                    JOptionPane.showMessageDialog(
+                            MyApplication.this, // Parent component
+                            "Series is not initialized!", // Message to display
+                            "Warning", // Title of the dialog
+                            JOptionPane.WARNING_MESSAGE // Type of message
+                    );
+                } else {
+                    if (linerRadioButton.isSelected()) {
+                        try {
+                            series = new Linear(Double.parseDouble(firstElemTextField.getText()), Double.parseDouble(stepTextField.getText()), Integer.parseInt(numOfElementsTextField.getText()));
+                        } catch (IllegalArgumentException e) {
+                            JOptionPane.showMessageDialog(
+                                    MyApplication.this, // Parent component
+                                    "At least one of the fields \"first number\", \"step\" or \"number of elements\" has invalid type!", // Message to display
+                                    "Warning", // Title of the dialog
+                                    JOptionPane.WARNING_MESSAGE // Type of message
+                            );
+                        }
+                    } else {
+                        try {
+                            series = new Exponential(Double.parseDouble(firstElemTextField.getText()), Double.parseDouble(stepTextField.getText()), Integer.parseInt(numOfElementsTextField.getText()));
+                        } catch (IllegalArgumentException e) {
+                            JOptionPane.showMessageDialog(
+                                    MyApplication.this, // Parent component
+                                    e.getMessage(), // Message to display
+                                    "Warning", // Title of the dialog
+                                    JOptionPane.WARNING_MESSAGE // Type of message
+                            );
+                        }
+
+                    }
+                    if (series != null) {
+                        try {
+                            if (selectedItem != null) {
+                                resJElemTextField.setText(String.valueOf(series.jElemCalc(selectedItem)));
+                            }
+                        } catch (IllegalArgumentException e) {
+                            JOptionPane.showMessageDialog(
+                                    MyApplication.this, // Parent component
+                                    e.getMessage(), // Message to display
+                                    "Warning", // Title of the dialog
+                                    JOptionPane.WARNING_MESSAGE // Type of message
+                            );
+                        }
+                    }
+                }
+            }
+        });
+
+
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
