@@ -11,8 +11,7 @@ import java.awt.event.*;
 public class MyApplication extends JFrame {
     public static void main(String[] args) {
         MyApplication myApp = new MyApplication("Series");
-        myApp.setSize(400, 550);
-        myApp.setMinimumSize(new Dimension(400, 550));
+        myApp.setMinimumSize(new Dimension(400, 600));
         myApp.setVisible(true);
     }
 
@@ -46,37 +45,57 @@ public class MyApplication extends JFrame {
     MyApplication(String str) {
         super(str);
 
+        UIManager.put("OptionPane.messageFont", new Font("Dialog", Font.BOLD, 16));
+        UIManager.put("OptionPane.buttonFont", new Font("Dialog", Font.PLAIN, 16));
+
         // Set the background color of the content pane
         this.getContentPane().setBackground(Color.BLACK);
 
 
         this.setLayout(new GridBagLayout());
+        Font largerFont = new Font("Dialog", Font.BOLD, 16);
+
+        JLabel label = new JLabel();
+        Font defaultFont = label.getFont();
+        System.out.println("Default Font: " + defaultFont);
+
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5); // margins for elements in the grid layout (top, left, bottom, right) 5px
         gbc.fill = GridBagConstraints.HORIZONTAL; // elements are stretched horizontally
 
         firstElemLabel = new JLabel("first element: ");
         firstElemLabel.setForeground(Color.GREEN);
+        firstElemLabel.setFont(largerFont);
         firstElemTextField = new JTextField(10);
+        firstElemTextField.setFont(largerFont);
         stepLabel = new JLabel("step: ");
         stepLabel.setForeground(Color.GREEN);
+        stepLabel.setFont(largerFont);
         stepTextField = new JTextField(10);
+        stepTextField.setFont(largerFont);
         numOfElementsLabel = new JLabel("number of elements: ");
         numOfElementsLabel.setForeground(Color.GREEN);
+        numOfElementsLabel.setFont(largerFont);
         numOfElementsTextField = new JTextField(10);
+        numOfElementsTextField.setFont(largerFont);
+        numOfElementsLabel.setFont(largerFont);
         linerRadioButton = new JRadioButton("Linear");
         linerRadioButton.setBackground(null);
         linerRadioButton.setForeground(Color.WHITE);
         linerRadioButton.setFocusPainted(false);
+        linerRadioButton.setFont(largerFont);
         exponentialRadioButton = new JRadioButton("Exponential");
         exponentialRadioButton.setBackground(null);
         exponentialRadioButton.setForeground(Color.WHITE);
         exponentialRadioButton.setFocusPainted(false);
+        exponentialRadioButton.setFont(largerFont);
         resSumTextField = new JTextField("sum result", 10);
         resSumTextField.setEnabled(false);
+        resSumTextField.setFont(largerFont);
         calcSumButton = new JButton("calculate sum");
         calcSumButton.setFocusPainted(false);
         calcSumButton.setBorder(greenBorder);
+        calcSumButton.setFont(largerFont);
 
         calcSumButton.addMouseListener(new MouseAdapter() {
             @Override
@@ -92,10 +111,13 @@ public class MyApplication extends JFrame {
 
         jElemTextLabel = new JLabel("input j index:");
         jElemTextLabel.setForeground(Color.GREEN);
+        jElemTextLabel.setFont(largerFont);
         jElemComboBox = new JComboBox<>();
+        jElemComboBox.setFont(largerFont);
         calcJElemButton = new JButton("calculate j element");
         calcJElemButton.setFocusPainted(false);
         calcJElemButton.setBorder(greenBorder);
+        calcJElemButton.setFont(largerFont);
 
         //TODO hide focus on warnings and errors buttons
 
@@ -113,12 +135,16 @@ public class MyApplication extends JFrame {
 
         resJElemTextField = new JTextField("j element result", 10);
         resJElemTextField.setEnabled(false);
+        resJElemTextField.setFont(largerFont);
         fileNameLabel = new JLabel("input file name:");
         fileNameLabel.setForeground(Color.GREEN);
+        fileNameLabel.setFont(largerFont);
         fileNameTextField = new JTextField(10);
+        fileNameTextField.setFont(largerFont);
         writeSumToFileButton = new JButton("write sum to file");
         writeSumToFileButton.setFocusPainted(false);
         writeSumToFileButton.setBorder(greenBorder);
+        writeSumToFileButton.setFont(largerFont);
 
         writeSumToFileButton.addMouseListener(new MouseAdapter() {
             @Override
@@ -135,6 +161,7 @@ public class MyApplication extends JFrame {
         writeJElemToFileButton = new JButton("write j element to file");
         writeJElemToFileButton.setFocusPainted(false);
         writeJElemToFileButton.setBorder(greenBorder);
+        writeJElemToFileButton.setFont(largerFont);
 
         writeJElemToFileButton.addMouseListener(new MouseAdapter() {
             @Override
@@ -151,6 +178,7 @@ public class MyApplication extends JFrame {
         fileContentsButton = new JButton("show file contents");
         fileContentsButton.setFocusPainted(false);
         fileContentsButton.setBorder(greenBorder);
+        fileContentsButton.setFont(largerFont);
 
         fileContentsButton.addMouseListener(new MouseAdapter() {
             @Override
@@ -171,6 +199,7 @@ public class MyApplication extends JFrame {
         showSeriesButton = new JButton("show series");
         showSeriesButton.setFocusPainted(false);
         showSeriesButton.setBorder(greenBorder);
+        showSeriesButton.setFont(largerFont);
 
         showSeriesButton.addMouseListener(new MouseAdapter() {
             @Override
@@ -186,11 +215,13 @@ public class MyApplication extends JFrame {
 
         showSeriesTextField = new JTextField("series", 10);
         showSeriesTextField.setEnabled(false);
+        showSeriesTextField.setFont(largerFont);
         JScrollPane showSeriesScrollPane = new JScrollPane(showSeriesTextField);
-        showSeriesScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED); //TODO try to make a scrollbar visible
+        showSeriesScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS); //TODO try to make a scrollbar visible
         writeSeriesToFileButton = new JButton("write series to file");
         writeSeriesToFileButton.setFocusPainted(false);
         writeSeriesToFileButton.setBorder(greenBorder);
+        writeSeriesToFileButton.setFont(largerFont);
 
         writeSeriesToFileButton.addMouseListener(new MouseAdapter() {
             @Override
