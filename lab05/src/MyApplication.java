@@ -215,6 +215,7 @@ public class MyApplication extends JFrame {
         JScrollPane scrollPane = new JScrollPane(fileContentsTextArea);
         fileContentsButton.setHorizontalAlignment(SwingConstants.CENTER);
         fileContentsTextArea.setEnabled(false);
+        fileContentsTextArea.setFont(largerFont);
         showSeriesButton = new JButton("create series");
         fileContentsButton.setHorizontalAlignment(SwingConstants.CENTER);
         showSeriesButton.setFocusPainted(false);
