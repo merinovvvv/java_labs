@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.io.IOException;
+import java.awt.event.*;
 
 public class MyApplication extends JFrame {
     public static void main(String[] args) {
@@ -77,14 +78,14 @@ public class MyApplication extends JFrame {
         calcSumButton.setFocusPainted(false);
         calcSumButton.setBorder(greenBorder);
 
-        calcSumButton.addMouseListener(new java.awt.event.MouseAdapter() {
+        calcSumButton.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
+            public void mouseEntered(MouseEvent evt) {
                 calcSumButton.setBackground(Color.ORANGE);
             }
 
             @Override
-            public void mouseExited(java.awt.event.MouseEvent evt) {
+            public void mouseExited(MouseEvent evt) {
                 calcSumButton.setBackground(UIManager.getColor("Button.background"));
             }
         });
@@ -96,14 +97,16 @@ public class MyApplication extends JFrame {
         calcJElemButton.setFocusPainted(false);
         calcJElemButton.setBorder(greenBorder);
 
-        calcJElemButton.addMouseListener(new java.awt.event.MouseAdapter() {
+        //TODO hide focus on warnings and errors buttons
+
+        calcJElemButton.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
+            public void mouseEntered(MouseEvent evt) {
                 calcJElemButton.setBackground(Color.ORANGE);
             }
 
             @Override
-            public void mouseExited(java.awt.event.MouseEvent evt) {
+            public void mouseExited(MouseEvent evt) {
                 calcJElemButton.setBackground(UIManager.getColor("Button.background"));
             }
         });
@@ -117,14 +120,14 @@ public class MyApplication extends JFrame {
         writeSumToFileButton.setFocusPainted(false);
         writeSumToFileButton.setBorder(greenBorder);
 
-        writeSumToFileButton.addMouseListener(new java.awt.event.MouseAdapter() {
+        writeSumToFileButton.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
+            public void mouseEntered(MouseEvent evt) {
                 writeSumToFileButton.setBackground(Color.ORANGE);
             }
 
             @Override
-            public void mouseExited(java.awt.event.MouseEvent evt) {
+            public void mouseExited(MouseEvent evt) {
                 writeSumToFileButton.setBackground(UIManager.getColor("Button.background"));
             }
         });
@@ -133,14 +136,14 @@ public class MyApplication extends JFrame {
         writeJElemToFileButton.setFocusPainted(false);
         writeJElemToFileButton.setBorder(greenBorder);
 
-        writeJElemToFileButton.addMouseListener(new java.awt.event.MouseAdapter() {
+        writeJElemToFileButton.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
+            public void mouseEntered(MouseEvent evt) {
                 writeJElemToFileButton.setBackground(Color.ORANGE);
             }
 
             @Override
-            public void mouseExited(java.awt.event.MouseEvent evt) {
+            public void mouseExited(MouseEvent evt) {
                 writeJElemToFileButton.setBackground(UIManager.getColor("Button.background"));
             }
         });
@@ -149,14 +152,14 @@ public class MyApplication extends JFrame {
         fileContentsButton.setFocusPainted(false);
         fileContentsButton.setBorder(greenBorder);
 
-        fileContentsButton.addMouseListener(new java.awt.event.MouseAdapter() {
+        fileContentsButton.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
+            public void mouseEntered(MouseEvent evt) {
                 fileContentsButton.setBackground(Color.ORANGE);
             }
 
             @Override
-            public void mouseExited(java.awt.event.MouseEvent evt) {
+            public void mouseExited(MouseEvent evt) {
                 fileContentsButton.setBackground(UIManager.getColor("Button.background"));
             }
         });
@@ -169,14 +172,14 @@ public class MyApplication extends JFrame {
         showSeriesButton.setFocusPainted(false);
         showSeriesButton.setBorder(greenBorder);
 
-        showSeriesButton.addMouseListener(new java.awt.event.MouseAdapter() {
+        showSeriesButton.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
+            public void mouseEntered(MouseEvent evt) {
                 showSeriesButton.setBackground(Color.ORANGE);
             }
 
             @Override
-            public void mouseExited(java.awt.event.MouseEvent evt) {
+            public void mouseExited(MouseEvent evt) {
                 showSeriesButton.setBackground(UIManager.getColor("Button.background"));
             }
         });
@@ -189,14 +192,14 @@ public class MyApplication extends JFrame {
         writeSeriesToFileButton.setFocusPainted(false);
         writeSeriesToFileButton.setBorder(greenBorder);
 
-        writeSeriesToFileButton.addMouseListener(new java.awt.event.MouseAdapter() {
+        writeSeriesToFileButton.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
+            public void mouseEntered(MouseEvent evt) {
                 writeSeriesToFileButton.setBackground(Color.ORANGE);
             }
 
             @Override
-            public void mouseExited(java.awt.event.MouseEvent evt) {
+            public void mouseExited(MouseEvent evt) {
                 writeSeriesToFileButton.setBackground(UIManager.getColor("Button.background"));
             }
         });
