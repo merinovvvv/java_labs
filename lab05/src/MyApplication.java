@@ -1,5 +1,6 @@
 import javax.swing.*;
 import javax.swing.border.LineBorder;
+import javax.swing.plaf.ColorUIResource;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,7 +12,7 @@ import java.awt.event.*;
 public class MyApplication extends JFrame {
     public static void main(String[] args) {
         MyApplication myApp = new MyApplication("Series");
-        myApp.setMinimumSize(new Dimension(400, 600));
+        myApp.setMinimumSize(new Dimension(400, 700));
         myApp.setVisible(true);
     }
 
@@ -39,14 +40,16 @@ public class MyApplication extends JFrame {
     JTextArea fileContentsTextArea;
     JButton fileContentsButton;
     JButton showSeriesButton;
-    JTextField showSeriesTextField;
+    JTextArea showSeriesTextArea;
     JButton writeSeriesToFileButton;
+    JButton clearFileButton;
 
     MyApplication(String str) {
         super(str);
 
         UIManager.put("OptionPane.messageFont", new Font("Dialog", Font.BOLD, 16));
         UIManager.put("OptionPane.buttonFont", new Font("Dialog", Font.PLAIN, 16));
+        UIManager.put("Button.focus", new ColorUIResource(new Color(0, 0, 0, 0)));
 
         // Set the background color of the content pane
         this.getContentPane().setBackground(Color.BLACK);
@@ -96,6 +99,10 @@ public class MyApplication extends JFrame {
         calcSumButton.setFocusPainted(false);
         calcSumButton.setBorder(greenBorder);
         calcSumButton.setFont(largerFont);
+        clearFileButton = new JButton("clear file");
+        clearFileButton.setFocusPainted(false);
+        clearFileButton.setBorder(greenBorder);
+        clearFileButton.setFont(largerFont);
 
         calcSumButton.addMouseListener(new MouseAdapter() {
             @Override
@@ -106,6 +113,18 @@ public class MyApplication extends JFrame {
             @Override
             public void mouseExited(MouseEvent evt) {
                 calcSumButton.setBackground(UIManager.getColor("Button.background"));
+            }
+        });
+
+        clearFileButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent evt) {
+                clearFileButton.setBackground(Color.ORANGE);
+            }
+
+            @Override
+            public void mouseExited(MouseEvent evt) {
+                clearFileButton.setBackground(UIManager.getColor("Button.background"));
             }
         });
 
@@ -196,7 +215,8 @@ public class MyApplication extends JFrame {
         JScrollPane scrollPane = new JScrollPane(fileContentsTextArea);
         fileContentsButton.setHorizontalAlignment(SwingConstants.CENTER);
         fileContentsTextArea.setEnabled(false);
-        showSeriesButton = new JButton("show series");
+        showSeriesButton = new JButton("create series");
+        fileContentsButton.setHorizontalAlignment(SwingConstants.CENTER);
         showSeriesButton.setFocusPainted(false);
         showSeriesButton.setBorder(greenBorder);
         showSeriesButton.setFont(largerFont);
@@ -213,11 +233,14 @@ public class MyApplication extends JFrame {
             }
         });
 
-        showSeriesTextField = new JTextField("series", 10);
-        showSeriesTextField.setEnabled(false);
-        showSeriesTextField.setFont(largerFont);
-        JScrollPane showSeriesScrollPane = new JScrollPane(showSeriesTextField);
-        showSeriesScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS); //TODO try to make a scrollbar visible
+        showSeriesTextArea = new JTextArea(2, 20);
+        showSeriesTextArea.setLineWrap(false);
+        showSeriesTextArea.setWrapStyleWord(false);
+        showSeriesTextArea.setEnabled(false);
+        showSeriesTextArea.setFont(largerFont);
+        JScrollPane showSeriesScrollPane = new JScrollPane(showSeriesTextArea);
+//        showSeriesScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        showSeriesScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
         writeSeriesToFileButton = new JButton("write series to file");
         writeSeriesToFileButton.setFocusPainted(false);
         writeSeriesToFileButton.setBorder(greenBorder);
@@ -260,38 +283,47 @@ public class MyApplication extends JFrame {
         gbc.gridx = 1;
         this.add(exponentialRadioButton, gbc);
 
-        gbc.gridx = 0;
-        gbc.gridy = 4;
-        this.add(showSeriesButton, gbc);
-        gbc.gridx = 1;
-        this.add(showSeriesScrollPane, gbc);
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
 
         gbc.gridx = 0;
+        gbc.gridy = 4;
+
+
+        this.add(showSeriesButton, gbc);
+        //gbc.gridx = 1;
         gbc.gridy = 5;
+        this.add(showSeriesScrollPane, gbc);
+
+        gbc.gridwidth = 1;
+        gbc.anchor = GridBagConstraints.WEST;
+
+        gbc.gridx = 0;
+        gbc.gridy = 6;
         this.add(calcSumButton, gbc);
         gbc.gridx = 1;
         this.add(resSumTextField, gbc);
 
         gbc.gridx = 0;
-        gbc.gridy = 6;
+        gbc.gridy = 7;
         this.add(jElemTextLabel, gbc);
         gbc.gridx = 1;
         this.add(jElemComboBox, gbc);
 
         gbc.gridx = 0;
-        gbc.gridy = 7;
+        gbc.gridy = 8;
         this.add(calcJElemButton, gbc);
         gbc.gridx = 1;
         this.add(resJElemTextField, gbc);
 
         gbc.gridx = 0;
-        gbc.gridy = 8;
+        gbc.gridy = 9;
         this.add(fileNameLabel, gbc);
         gbc.gridx = 1;
         this.add(fileNameTextField, gbc);
 
         gbc.gridx = 0;
-        gbc.gridy = 9;
+        gbc.gridy = 10;
         this.add(writeSumToFileButton, gbc);
         gbc.gridx = 1;
         this.add(writeJElemToFileButton, gbc);
@@ -300,17 +332,21 @@ public class MyApplication extends JFrame {
         gbc.anchor = GridBagConstraints.CENTER;
 
         gbc.gridx = 0;
-        gbc.gridy = 10;
+        gbc.gridy = 11;
         this.add(writeSeriesToFileButton, gbc);
 
-        gbc.gridy = 11;
+        gbc.gridy = 12;
         this.add(fileContentsButton, gbc);
 
-        gbc.gridy = 12;
+        gbc.gridy = 13;
         this.add(scrollPane, gbc);
+
+        gbc.gridy = 18;
+        this.add(clearFileButton, gbc);
 
         gbc.gridwidth = 1;
         gbc.anchor = GridBagConstraints.WEST;
+
 
         linerRadioButton.addActionListener(new ActionListener() {
             @Override
@@ -326,6 +362,32 @@ public class MyApplication extends JFrame {
             public void actionPerformed(ActionEvent actionEvent) {
                 if (exponentialRadioButton.isSelected()) {
                     linerRadioButton.setSelected(false);
+                }
+            }
+        });
+
+        clearFileButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    if (fileNameTextField.getText().isEmpty()) {
+                        JOptionPane.showMessageDialog(
+                                MyApplication.this,
+                                "File name is not entered!",
+                                "Warning",
+                                JOptionPane.WARNING_MESSAGE
+                        );
+                    } else {
+                        series.clearFile(fileNameTextField.getText());
+                        fileContentsTextArea.setText("");
+                    }
+                } catch (IOException ex) {
+                    JOptionPane.showMessageDialog(
+                            MyApplication.this,
+                            "An error occurred while clearing the file. Please try again.",
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE
+                    );
                 }
             }
         });
@@ -358,7 +420,8 @@ public class MyApplication extends JFrame {
             public void actionPerformed(ActionEvent actionEvent) {
                 buttonsExceptionWork();
                 if (series != null) {
-                    showSeriesTextField.setText(series.toString());
+                    showSeriesTextArea.setText(series.toString());
+                    //fileContentsTextArea.setCaretPosition(0);
                 }
             }
         });

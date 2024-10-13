@@ -38,7 +38,7 @@ abstract class Series {
 
     public void writeToFile(String fileName) throws FileNotFoundException, IOException {
         try (FileWriter fileWriter = new FileWriter(fileName, true)) {
-            fileWriter.write(toString());
+            fileWriter.write(toString() + "\n");
         }
     }
 
@@ -56,7 +56,7 @@ abstract class Series {
         }
     }
 
-    static public void clearFile(String fileName) throws FileNotFoundException, IOException {
+    public void clearFile(String fileName) throws FileNotFoundException, IOException {
         try (FileWriter fileWriter = new FileWriter(fileName)) {
             fileWriter.write("");
         }
@@ -69,6 +69,6 @@ abstract class Series {
         for (int i = 2; i <= numOfElements; i++) {
             sb.append(jElemCalc(i)).append(" ");
         }
-        return sb.toString() + "\n";
+        return sb.toString();// + "\n";
     }
 }
