@@ -1,2 +1,3 @@
 Cars, Uganda, 1000
 Planes, Barbados, 700
+Cars, Belarus, 100

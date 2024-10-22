@@ -72,7 +72,7 @@ public class ImportCountries {
         if (!isInCountrySet) {
             Object[] options = {"YES", "NO"};
             int choice = JOptionPane.showOptionDialog(
-                    null,
+                    myApplication,
                     "The file contains a country '" + parts[1] + "' that doesn't exist or is not in 'import countries'.\nDo you want to add a country?",
                     "country question",
                     JOptionPane.YES_NO_OPTION,

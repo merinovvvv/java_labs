@@ -42,30 +42,41 @@ public class GoodsForExport {
     }
 
     static void goodSetCheck(String[] parts, MyApplication myApplication, GoodsForExport goodsForExport) {
-        boolean isInGoodsSet = false;
-        for (String good : goodsForExport.getExportGoods()) {
-            if (parts[0].equals(good)) {
-                isInGoodsSet = true;
-                break;
-            }
-        }
-        if (!isInGoodsSet) {
-            Object[] options = {"YES", "NO"};
-            int choice = JOptionPane.showOptionDialog(
-                    null,
-                    "The file contains a good '" + parts[0] + "' that is not in 'goods for export'.\nDo you want to add a good for export?",
-                    "good question",
-                    JOptionPane.YES_NO_OPTION,
-                    JOptionPane.QUESTION_MESSAGE,
-                    null,
-                    options,
-                    options[0]
+        try {
+            Integer.parseInt(parts[0]);
+            JOptionPane.showMessageDialog(
+                    myApplication,
+                    "The file contains a number '" + parts[0] + "' that is not a good.",
+                    "Warning",
+                    JOptionPane.WARNING_MESSAGE
             );
+            myApplication.fileContentTextArea.setText("");
+        } catch (NumberFormatException e) {
+            boolean isInGoodsSet = false;
+            for (String good : goodsForExport.getExportGoods()) {
+                if (parts[0].equals(good)) {
+                    isInGoodsSet = true;
+                    break;
+                }
+            }
+            if (!isInGoodsSet) {
+                Object[] options = {"YES", "NO"};
+                int choice = JOptionPane.showOptionDialog(
+                        myApplication,
+                        "The file contains a good '" + parts[0] + "' that is not a good or not in 'goods for export'.\nDo you want to add a good for export?",
+                        "good question",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        options,
+                        options[0]
+                );
 
-            if (choice == JOptionPane.YES_OPTION) {
-                goodsForExport.addGood(parts[0]);
-            } else if (choice == JOptionPane.NO_OPTION) {
-                myApplication.fileContentTextArea.setText("");
+                if (choice == JOptionPane.YES_OPTION) {
+                    goodsForExport.addGood(parts[0]);
+                } else if (choice == JOptionPane.NO_OPTION) {
+                    myApplication.fileContentTextArea.setText("");
+                }
             }
         }
     }

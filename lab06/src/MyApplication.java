@@ -105,7 +105,16 @@ public class MyApplication extends JFrame {
         closeFileButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                    fileContentTextArea.setText("");
+                if (fileContentTextArea.getText().isEmpty()) {
+                    JOptionPane.showMessageDialog(
+                            MyApplication.this,
+                            "The file is empty or not opened.",
+                            "Warning",
+                            JOptionPane.WARNING_MESSAGE
+                    );
+                }
+                fileContentTextArea.setText("");
+                infoTextArea.setText("");
         }});
 
         infoTextArea = new JTextArea(6, 15);
