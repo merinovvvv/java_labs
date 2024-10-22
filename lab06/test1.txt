@@ -1,6 +1,6 @@
-Яблоки, Россия, 1200
-Яблоки, Казахстан, 800
-Груши, Беларусь, 600
-Яблоки, Узбекистан, 500
-Груши, Россия, 300
-Бананы, Китай, 1500
+Apples, Russia, 1200
+Apples, Kazakhstan, 800
+Pears, Belarus, 600
+Apples, Uzbekistan, 500
+Pears, Russia, 300
+Bananas, China, 1500

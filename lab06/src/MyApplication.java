@@ -3,27 +3,19 @@ import javax.swing.plaf.ColorUIResource;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
 import java.util.ArrayList;
 
 public class MyApplication extends JFrame {
-    public static void main(String[] args) {
-        MyApplication myApplication = new MyApplication("Goods");
-        myApplication.setMinimumSize(new Dimension(500, 500));
-        myApplication.setVisible(true);
-    }
 
     Map<String, List<Object[]>> fileContentMap;
     JTextArea fileContentTextArea;
     JLabel goodNameLabel;
     JTextField goodNameTextField;
     JButton showInfoButton;
+    JButton closeFileButton;
     JTextArea infoTextArea;
 
     MyApplication(String string) {
@@ -46,8 +38,11 @@ public class MyApplication extends JFrame {
         fileContentTextArea = new JTextArea(6, 15);
         fileContentTextArea.setFont(largerFont);
         fileContentTextArea.setForeground(Color.BLACK);
-        fileContentTextArea.setEnabled(false);
+        fileContentTextArea.setEditable(false);
         JScrollPane scrollPaneFileContent = new JScrollPane(fileContentTextArea);
+
+        closeFileButton = new JButton("close file");
+        closeFileButton.setFont(largerFont);
 
         goodNameLabel = new JLabel("good's name: ");
         goodNameLabel.setFont(largerFont);
@@ -107,10 +102,15 @@ public class MyApplication extends JFrame {
             }
         });
 
+        closeFileButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                    fileContentTextArea.setText("");
+        }});
 
         infoTextArea = new JTextArea(6, 15);
         infoTextArea.setFont(largerFont);
-        infoTextArea.setEnabled(false);
+        infoTextArea.setEditable(false);
         infoTextArea.setForeground(Color.BLACK);
         JScrollPane scrollPaneInfo = new JScrollPane(infoTextArea);
 
@@ -119,7 +119,7 @@ public class MyApplication extends JFrame {
         fileMenu.setFont(largerFont);
         JMenuItem openItem = new JMenuItem("Open");
         openItem.setFont(largerFont);
-        openItem.addActionListener(actionEvent -> openFile());
+        openItem.addActionListener(actionEvent -> FileParse.openFile(this));
 
         fileMenu.add(openItem);
         menuBar.add(fileMenu);
@@ -130,63 +130,23 @@ public class MyApplication extends JFrame {
         gbc.gridwidth = 2;
         gbc.gridheight = 6;
         this.add(scrollPaneFileContent, gbc);
-        gbc.gridwidth = 1;
+        gbc.gridwidth = 2;
         gbc.gridheight = 1;
         gbc.gridy = 7;
+        this.add(closeFileButton, gbc);
+        gbc.gridy = 8;
+        gbc.gridwidth = 1;
         this.add(goodNameLabel, gbc);
         gbc.gridx = 1;
         this.add(goodNameTextField, gbc);
-        gbc.gridy = 8;
+        gbc.gridy = 9;
         gbc.gridx = 0;
         gbc.gridwidth = 2;
         this.add(showInfoButton, gbc);
-        gbc.gridy = 9;
+        gbc.gridy = 10;
         gbc.gridheight = 6;
         this.add(scrollPaneInfo, gbc);
         gbc.gridwidth = 1;
         gbc.gridheight = 1;
-    }
-
-    private void openFile() {
-        JFileChooser fileChooser = new JFileChooser();
-        int result = fileChooser.showOpenDialog(this);
-        if (result == JFileChooser.APPROVE_OPTION) {
-            File selectedFile = fileChooser.getSelectedFile();
-            loadFileContent(selectedFile);
-        }
-    }
-
-    private void loadFileContent(File file) {
-        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))) {
-            StringBuilder fileContent = new StringBuilder();
-            String line;
-            while ((line = bufferedReader.readLine()) != null) {
-                fileContent.append(line).append("\n");
-            }
-            fileContentTextArea.setText(fileContent.toString());
-            fillMap(fileContent);
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Error while reading file: " + e.getMessage(),
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE
-            );
-        }
-    }
-
-    private void fillMap(StringBuilder fileContent) {
-        fileContentMap.clear();
-        String[] lines = fileContent.toString().split("\n");
-        for (String line : lines) {
-            String[] parts = line.split(", ");
-            if (parts.length == 3) {
-                String key = parts[0];
-                String country = parts[1];
-                int quantity = Integer.parseInt(parts[2]);
-                fileContentMap.computeIfAbsent(key, k -> new ArrayList<>())
-                        .add(new Object[]{country, quantity});
-            }
-        }
     }
 }

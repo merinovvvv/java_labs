@@ -1,6 +1,6 @@
-Телевизоры, Германия, 300
-Телевизоры, Франция, 250
-Холодильники, Италия, 200
-Стиральные машины, Германия, 150
-Телевизоры, Испания, 100
-Стиральные машины, Франция, 300
+Televisions, Germany, 300
+Televisions, France, 250
+Fridges, Italy, 200
+Washing machines, Germany, 150
+Televisions, Spain, 100
+Washing machines, France, 300
