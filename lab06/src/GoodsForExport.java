@@ -41,16 +41,16 @@ public class GoodsForExport {
         exportGoods.add(good);
     }
 
-    static void goodSetCheck(String[] parts, MyApplication myApplication, GoodsForExport goodsForExport) {
+    static void goodSetCheck(String[] parts, JTextArea fileContentTextArea, GoodsForExport goodsForExport) {
         try {
             Integer.parseInt(parts[0]);
             JOptionPane.showMessageDialog(
-                    myApplication,
+                    null,
                     "The file contains a number '" + parts[0] + "' that is not a good.",
                     "Warning",
                     JOptionPane.WARNING_MESSAGE
             );
-            myApplication.fileContentTextArea.setText("");
+            fileContentTextArea.setText("");
         } catch (NumberFormatException e) {
             boolean isInGoodsSet = false;
             for (String good : goodsForExport.getExportGoods()) {
@@ -62,7 +62,7 @@ public class GoodsForExport {
             if (!isInGoodsSet) {
                 Object[] options = {"YES", "NO"};
                 int choice = JOptionPane.showOptionDialog(
-                        myApplication,
+                        null,
                         "The file contains a good '" + parts[0] + "' that is not a good or not in 'goods for export'.\nDo you want to add a good for export?",
                         "good question",
                         JOptionPane.YES_NO_OPTION,
@@ -75,7 +75,7 @@ public class GoodsForExport {
                 if (choice == JOptionPane.YES_OPTION) {
                     goodsForExport.addGood(parts[0]);
                 } else if (choice == JOptionPane.NO_OPTION) {
-                    myApplication.fileContentTextArea.setText("");
+                    fileContentTextArea.setText("");
                 }
             }
         }

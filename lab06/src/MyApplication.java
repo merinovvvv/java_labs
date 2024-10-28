@@ -15,8 +15,10 @@ public class MyApplication extends JFrame {
     JLabel goodNameLabel;
     JTextField goodNameTextField;
     JButton showInfoButton;
+    JButton addInfoButton;
     JButton closeFileButton;
     JTextArea infoTextArea;
+    JMenuBar menuBar;
 
     MyApplication(String string) {
         super(string);
@@ -42,6 +44,7 @@ public class MyApplication extends JFrame {
         JScrollPane scrollPaneFileContent = new JScrollPane(fileContentTextArea);
 
         closeFileButton = new JButton("close file");
+        closeFileButton = new JButton("close file");
         closeFileButton.setFont(largerFont);
 
         goodNameLabel = new JLabel("good's name: ");
@@ -51,7 +54,10 @@ public class MyApplication extends JFrame {
         showInfoButton = new JButton("show info");
         showInfoButton.setFont(largerFont);
 
-        showInfoButton.addActionListener(new ActionListener() {
+        addInfoButton = new JButton("add info");
+        addInfoButton.setFont(largerFont);
+
+        showInfoButton.addActionListener(new ActionListener() { //TODO
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 if (goodNameTextField.getText().isEmpty()) {
@@ -102,6 +108,15 @@ public class MyApplication extends JFrame {
             }
         });
 
+        addInfoButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                AddWindow addWindow = new AddWindow("Add info", fileContentTextArea);
+                addWindow.setMinimumSize(new Dimension(500, 200));
+                addWindow.setVisible(true);
+            }
+        });
+
         closeFileButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -123,12 +138,12 @@ public class MyApplication extends JFrame {
         infoTextArea.setForeground(Color.BLACK);
         JScrollPane scrollPaneInfo = new JScrollPane(infoTextArea);
 
-        JMenuBar menuBar = new JMenuBar();
+        menuBar = new JMenuBar();
         JMenu fileMenu = new JMenu("File");
         fileMenu.setFont(largerFont);
         JMenuItem openItem = new JMenuItem("Open");
         openItem.setFont(largerFont);
-        openItem.addActionListener(actionEvent -> FileParse.openFile(this));
+        openItem.addActionListener(actionEvent -> FileParse.openFile(fileContentTextArea, fileContentMap));
 
         fileMenu.add(openItem);
         menuBar.add(fileMenu);
@@ -139,20 +154,26 @@ public class MyApplication extends JFrame {
         gbc.gridwidth = 2;
         gbc.gridheight = 6;
         this.add(scrollPaneFileContent, gbc);
+
+        gbc.gridheight = 1;
+        gbc.gridwidth = 2;
+        gbc.gridy = 7;
+        this.add(addInfoButton, gbc);
+
         gbc.gridwidth = 2;
         gbc.gridheight = 1;
-        gbc.gridy = 7;
-        this.add(closeFileButton, gbc);
         gbc.gridy = 8;
+        this.add(closeFileButton, gbc);
+        gbc.gridy = 9;
         gbc.gridwidth = 1;
         this.add(goodNameLabel, gbc);
         gbc.gridx = 1;
         this.add(goodNameTextField, gbc);
-        gbc.gridy = 9;
+        gbc.gridy = 10;
         gbc.gridx = 0;
         gbc.gridwidth = 2;
         this.add(showInfoButton, gbc);
-        gbc.gridy = 10;
+        gbc.gridy = 11;
         gbc.gridheight = 6;
         this.add(scrollPaneInfo, gbc);
         gbc.gridwidth = 1;

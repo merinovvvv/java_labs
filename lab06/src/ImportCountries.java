@@ -61,7 +61,7 @@ public class ImportCountries {
         importCountries.add(country);
     }
 
-    static void countrySetCheck(String[] parts, MyApplication myApplication, ImportCountries importCountries) {
+    static void countrySetCheck(String[] parts, JTextArea fileContentTextArea, ImportCountries importCountries) {
         boolean isInCountrySet = false;
         for (String country : importCountries.getImportCountries()) {
             if (parts[1].equals(country)) {
@@ -72,7 +72,7 @@ public class ImportCountries {
         if (!isInCountrySet) {
             Object[] options = {"YES", "NO"};
             int choice = JOptionPane.showOptionDialog(
-                    myApplication,
+                    null,
                     "The file contains a country '" + parts[1] + "' that doesn't exist or is not in 'import countries'.\nDo you want to add a country?",
                     "country question",
                     JOptionPane.YES_NO_OPTION,
@@ -85,7 +85,7 @@ public class ImportCountries {
             if (choice == JOptionPane.YES_OPTION) {
                 importCountries.addCountry(parts[1]);
             } else if (choice == JOptionPane.NO_OPTION) {
-                myApplication.fileContentTextArea.setText("");
+                fileContentTextArea.setText("");
             }
         }
     }
