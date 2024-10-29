@@ -9,16 +9,13 @@ import java.util.Map;
 
 public class FileParse {
 
-    static ImportCountries importCountries = new ImportCountries(); //TODO make non static
-    static GoodsForExport goodsForExport = new GoodsForExport(); //TODO make non static
-
-    static void openFile(JTextArea fileContentTextArea, Map<String, List<Object[]>> fileContentMap) {
+    static void openFile(JTextArea fileContentTextArea, Map<String, List<Object[]>> fileContentMap, ImportCountries importCountries, GoodsForExport goodsForExport) {
         JFileChooser fileChooser = new JFileChooser();
         int result = fileChooser.showOpenDialog(null);
         if (result == JFileChooser.APPROVE_OPTION) {
             File selectedFile = fileChooser.getSelectedFile();
             try {
-                loadFileContent(selectedFile, fileContentTextArea, fileContentMap);
+                loadFileContent(selectedFile, fileContentTextArea, fileContentMap, importCountries, goodsForExport);
             } catch (IOException e) {
                 JOptionPane.showMessageDialog(
                         null,
@@ -30,7 +27,7 @@ public class FileParse {
         }
     }
 
-    static void loadFileContent(File file, JTextArea fileContentTextArea, Map<String, List<Object[]>> fileContentMap) throws IOException{
+    static void loadFileContent(File file, JTextArea fileContentTextArea, Map<String, List<Object[]>> fileContentMap, ImportCountries importCountries, GoodsForExport goodsForExport) throws IOException{
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))) {
             StringBuilder fileContent = new StringBuilder();
             String line;
@@ -39,7 +36,7 @@ public class FileParse {
             }
             fileContentTextArea.append(fileContent.toString());
             try {
-                fillMap(fileContentTextArea, fileContentMap);
+                fillMap(fileContentTextArea, fileContentMap, importCountries, goodsForExport);
             }  catch (NumberFormatException exception) {
                 JOptionPane.showMessageDialog(
                         null,
@@ -52,7 +49,7 @@ public class FileParse {
         }
     }
 
-    static void fillMap(JTextArea fileContentTextArea, Map<String, List<Object[]>> fileContentMap) throws NumberFormatException{ //TODO work if open file and then add info
+    static void fillMap(JTextArea fileContentTextArea, Map<String, List<Object[]>> fileContentMap, ImportCountries importCountries, GoodsForExport goodsForExport) throws NumberFormatException{
         fileContentMap.clear();
         String[] lines = fileContentTextArea.getText().split("\n");
         for (String line : lines) {

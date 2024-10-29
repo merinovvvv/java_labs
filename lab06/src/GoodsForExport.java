@@ -29,10 +29,6 @@ public class GoodsForExport {
         exportGoods.add("Tables");
     }
 
-    GoodsForExport(Set<String> exportGoods) {
-        this.exportGoods = exportGoods;
-    }
-
     Set<String> getExportGoods() {
         return exportGoods;
     }

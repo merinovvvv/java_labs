@@ -49,10 +49,6 @@ public class ImportCountries {
         importCountries.add("Uruguay");
     }
 
-    ImportCountries(Set<String> importCountries) {
-        this.importCountries = importCountries;
-    }
-
     Set<String> getImportCountries() {
         return importCountries;
     }

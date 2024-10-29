@@ -1,8 +1,6 @@
 import javax.swing.*;
 import javax.swing.plaf.ColorUIResource;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
@@ -16,14 +14,20 @@ public class MyApplication extends JFrame {
     JTextField goodNameTextField;
     JButton showInfoButton;
     JButton addInfoButton;
-    JButton closeFileButton;
+    JButton clearButton;
     JTextArea infoTextArea;
     JMenuBar menuBar;
+
+    ImportCountries importCountries;
+    GoodsForExport goodsForExport;
 
     MyApplication(String string) {
         super(string);
         this.getContentPane().setBackground(Color.PINK);
         this.setLayout(new GridBagLayout());
+
+        importCountries = new ImportCountries();
+        goodsForExport = new GoodsForExport();
 
         UIManager.put("OptionPane.messageFont", new Font("Dialog", Font.BOLD, 16));
         UIManager.put("OptionPane.buttonFont", new Font("Dialog", Font.PLAIN, 16));
@@ -43,9 +47,8 @@ public class MyApplication extends JFrame {
         fileContentTextArea.setEditable(false);
         JScrollPane scrollPaneFileContent = new JScrollPane(fileContentTextArea);
 
-        closeFileButton = new JButton("close file");
-        closeFileButton = new JButton("close file");
-        closeFileButton.setFont(largerFont);
+        clearButton = new JButton("clear");
+        clearButton.setFont(largerFont);
 
         goodNameLabel = new JLabel("good's name: ");
         goodNameLabel.setFont(largerFont);
@@ -57,80 +60,73 @@ public class MyApplication extends JFrame {
         addInfoButton = new JButton("add info");
         addInfoButton.setFont(largerFont);
 
-        showInfoButton.addActionListener(new ActionListener() { //TODO
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                if (goodNameTextField.getText().isEmpty()) {
+        showInfoButton.addActionListener(actionEvent -> {
+            if (goodNameTextField.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(
+                        MyApplication.this,
+                        "Good's name field is empty!",
+                        "Warning",
+                        JOptionPane.WARNING_MESSAGE
+                );
+                goodNameTextField.setText("");
+                infoTextArea.setText("");
+            } else if (fileContentTextArea.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(
+                        MyApplication.this,
+                        "Open file or add info first!",
+                        "Warning",
+                        JOptionPane.WARNING_MESSAGE
+                );
+                goodNameTextField.setText("");
+                infoTextArea.setText("");
+            } else {
+                List<String> exportCountries = new ArrayList<>(List.of());
+                int exportVolume = 0;
+                boolean isFound = false;
+                for (Map.Entry<String, List<Object[]>> entry : fileContentMap.entrySet()) { //TODO with Stream API
+                    if (entry.getKey().equals(goodNameTextField.getText())) {
+                        isFound = true;
+                        for (int i = 0; i < entry.getValue().size(); i++) {
+                            exportCountries.add((String) entry.getValue().get(i)[0]);
+                            exportVolume += (Integer) entry.getValue().get(i)[1];
+                        }
+                    }
+                }
+                if (!isFound) {
                     JOptionPane.showMessageDialog(
                             MyApplication.this,
-                            "Good's name field is empty!",
-                            "Warning",
-                            JOptionPane.WARNING_MESSAGE
-                    );
-                    goodNameTextField.setText("");
-                    infoTextArea.setText("");
-                } else if (fileContentTextArea.getText().isEmpty()) {
-                    JOptionPane.showMessageDialog(
-                            MyApplication.this,
-                            "Open file first!",
+                            "There is no good with the provided name!",
                             "Warning",
                             JOptionPane.WARNING_MESSAGE
                     );
                     goodNameTextField.setText("");
                     infoTextArea.setText("");
                 } else {
-                    List<String> exportCountries = new ArrayList<>(List.of());
-                    int exportVolume = 0;
-                    boolean isFound = false;
-                    for (Map.Entry<String, List<Object[]>> entry : fileContentMap.entrySet()) {
-                        if (entry.getKey().equals(goodNameTextField.getText())) {
-                            isFound = true;
-                            for (int i = 0; i < entry.getValue().size(); i++) {
-                                exportCountries.add((String) entry.getValue().get(i)[0]);
-                                exportVolume += (Integer) entry.getValue().get(i)[1];
-                            }
-                        }
-                    }
-                    if (!isFound) {
-                        JOptionPane.showMessageDialog(
-                                MyApplication.this,
-                                "There is no good with the provided name!",
-                                "Warning",
-                                JOptionPane.WARNING_MESSAGE
-                        );
-                        goodNameTextField.setText("");
-                        infoTextArea.setText("");
-                    } else {
-                        String countriesString = String.join(", ", exportCountries);
-                        infoTextArea.setText("import countries: " + countriesString + "\n" + "total exports: " + exportVolume);
-                    }
+                    String countriesString = String.join(", ", exportCountries);
+                    infoTextArea.setText("import countries: " + countriesString + "\n" + "total exports: " + exportVolume);
                 }
             }
         });
 
-        addInfoButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                AddWindow addWindow = new AddWindow("Add info", fileContentTextArea);
+        addInfoButton.addActionListener(actionEvent -> {
+                AddWindow addWindow = new AddWindow("Add info", fileContentTextArea, fileContentMap);
                 addWindow.setMinimumSize(new Dimension(500, 200));
                 addWindow.setVisible(true);
-            }
         });
 
-        closeFileButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                if (fileContentTextArea.getText().isEmpty()) {
-                    JOptionPane.showMessageDialog(
-                            MyApplication.this,
-                            "The file is empty or not opened.",
-                            "Warning",
-                            JOptionPane.WARNING_MESSAGE
-                    );
-                }
-                fileContentTextArea.setText("");
-                infoTextArea.setText("");
-        }});
+        clearButton.addActionListener(actionEvent -> {
+            if (fileContentTextArea.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(
+                        MyApplication.this,
+                        "The file is empty or not opened.",
+                        "Warning",
+                        JOptionPane.WARNING_MESSAGE
+                );
+            }
+            fileContentTextArea.setText("");
+            infoTextArea.setText("");
+            fileContentMap.clear();
+    });
 
         infoTextArea = new JTextArea(6, 15);
         infoTextArea.setFont(largerFont);
@@ -143,7 +139,7 @@ public class MyApplication extends JFrame {
         fileMenu.setFont(largerFont);
         JMenuItem openItem = new JMenuItem("Open");
         openItem.setFont(largerFont);
-        openItem.addActionListener(actionEvent -> FileParse.openFile(fileContentTextArea, fileContentMap));
+        openItem.addActionListener(actionEvent -> FileParse.openFile(fileContentTextArea, fileContentMap, importCountries, goodsForExport));
 
         fileMenu.add(openItem);
         menuBar.add(fileMenu);
@@ -163,7 +159,7 @@ public class MyApplication extends JFrame {
         gbc.gridwidth = 2;
         gbc.gridheight = 1;
         gbc.gridy = 8;
-        this.add(closeFileButton, gbc);
+        this.add(clearButton, gbc);
         gbc.gridy = 9;
         gbc.gridwidth = 1;
         this.add(goodNameLabel, gbc);

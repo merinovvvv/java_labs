@@ -3,8 +3,9 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.plaf.ColorUIResource;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class AddWindow extends JFrame {
 
@@ -19,7 +20,7 @@ public class AddWindow extends JFrame {
     boolean countryHasText;
     boolean exportHasText;
 
-    AddWindow(String string, JTextArea fileContentTextArea) {
+    AddWindow(String string, JTextArea fileContentTextArea, Map<String, List<Object[]>> fileContentMap) {
         super(string);
         this.getContentPane().setBackground(Color.PINK);
         this.setLayout(new GridBagLayout());
@@ -153,12 +154,21 @@ public class AddWindow extends JFrame {
             }
         });
 
-        addButton.addActionListener(new ActionListener() { //TODO work if not opening file
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
+        addButton.addActionListener(actionEvent -> {
+            try {
+                fileContentMap.computeIfAbsent(goodNameTextField.getText(), k -> new ArrayList<>())
+                        .add(new Object[]{countryNameTextField.getText(), Integer.parseInt(exportVolumeTextField.getText())});
                 fileContentTextArea.append(goodNameTextField.getText() + ", " + countryNameTextField.getText() +
-                        ", " + exportVolumeTextField.getText() + "\n");
+                            ", " + exportVolumeTextField.getText() + "\n");
                 dispose();
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(
+                        null,
+                        "Inappropriate type in 'export volume' field.",
+                        "Warning",
+                        JOptionPane.WARNING_MESSAGE
+                );
+                exportVolumeTextField.setText("");
             }
         });
     }
