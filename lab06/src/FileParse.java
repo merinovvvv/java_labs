@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -36,7 +37,8 @@ public class FileParse {
             }
             fileContentTextArea.append(fileContent.toString());
             try {
-                fillMap(fileContentTextArea, fileContentMap, importCountries, goodsForExport);
+                //fillMap(fileContentTextArea, fileContentMap, importCountries, goodsForExport);
+                fillMapStreamApi(fileContentTextArea, fileContentMap, importCountries, goodsForExport);
             }  catch (NumberFormatException exception) {
                 JOptionPane.showMessageDialog(
                         null,
@@ -55,15 +57,28 @@ public class FileParse {
         for (String line : lines) {
             String[] parts = line.split(", ");
             if (parts.length == 3) {
-                ImportCountries.countrySetCheck(parts, fileContentTextArea, importCountries);
-                GoodsForExport.goodSetCheck(parts, fileContentTextArea, goodsForExport);
-
-                String key = parts[0];
-                String country = parts[1];
-                int volume = Integer.parseInt(parts[2]);
-                fileContentMap.computeIfAbsent(key, k -> new ArrayList<>())
-                        .add(new Object[]{country, volume});
+                fillMapCommon(fileContentTextArea, fileContentMap, importCountries, goodsForExport, parts);
             }
         }
+    }
+
+    static void fillMapStreamApi(JTextArea fileContentTextArea, Map<String, List<Object[]>> fileContentMap, ImportCountries importCountries, GoodsForExport goodsForExport) throws NumberFormatException{ //TODO uses Stream api
+        fileContentMap.clear();
+        String[] lines = fileContentTextArea.getText().split("\n");
+        Arrays.stream(lines) //TODO with Stream API
+                .map(line -> line.split(", "))
+                .filter(parts -> parts.length == 3)
+                .forEach(parts -> fillMapCommon(fileContentTextArea, fileContentMap, importCountries, goodsForExport, parts));
+    }
+
+    private static void fillMapCommon(JTextArea fileContentTextArea, Map<String, List<Object[]>> fileContentMap, ImportCountries importCountries, GoodsForExport goodsForExport, String[] parts) {
+        ImportCountries.countrySetCheck(parts, fileContentTextArea, importCountries);
+        GoodsForExport.goodSetCheck(parts, fileContentTextArea, goodsForExport);
+
+        String key = parts[0];
+        String country = parts[1];
+        int volume = Integer.parseInt(parts[2]);
+        fileContentMap.computeIfAbsent(key, k -> new ArrayList<>())
+                .add(new Object[]{country, volume});
     }
 }

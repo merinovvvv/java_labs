@@ -48,13 +48,9 @@ public class GoodsForExport {
             );
             fileContentTextArea.setText("");
         } catch (NumberFormatException e) {
-            boolean isInGoodsSet = false;
-            for (String good : goodsForExport.getExportGoods()) {
-                if (parts[0].equals(good)) {
-                    isInGoodsSet = true;
-                    break;
-                }
-            }
+            boolean isInGoodsSet = goodsForExport.getExportGoods().stream() //TODO with Stream API
+                    .anyMatch(good -> parts[0].equals(good));
+
             if (!isInGoodsSet) {
                 Object[] options = {"YES", "NO"};
                 int choice = JOptionPane.showOptionDialog(

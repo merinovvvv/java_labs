@@ -58,13 +58,10 @@ public class ImportCountries {
     }
 
     static void countrySetCheck(String[] parts, JTextArea fileContentTextArea, ImportCountries importCountries) {
-        boolean isInCountrySet = false;
-        for (String country : importCountries.getImportCountries()) {
-            if (parts[1].equals(country)) {
-                isInCountrySet = true;
-                break;
-            }
-        }
+
+        boolean isInCountrySet = importCountries.getImportCountries().stream() //TODO with Stream API
+                .anyMatch(country -> parts[1].equals(country));
+
         if (!isInCountrySet) {
             Object[] options = {"YES", "NO"};
             int choice = JOptionPane.showOptionDialog(

@@ -13,6 +13,7 @@ public class MyApplication extends JFrame {
     JLabel goodNameLabel;
     JTextField goodNameTextField;
     JButton showInfoButton;
+    JButton showInfoButtonStreamApi;
     JButton addInfoButton;
     JButton clearButton;
     JTextArea infoTextArea;
@@ -57,6 +58,9 @@ public class MyApplication extends JFrame {
         showInfoButton = new JButton("show info");
         showInfoButton.setFont(largerFont);
 
+        showInfoButtonStreamApi = new JButton("show info stream api");
+        showInfoButtonStreamApi.setFont(largerFont);
+
         addInfoButton = new JButton("add info");
         addInfoButton.setFont(largerFont);
 
@@ -83,7 +87,7 @@ public class MyApplication extends JFrame {
                 List<String> exportCountries = new ArrayList<>(List.of());
                 int exportVolume = 0;
                 boolean isFound = false;
-                for (Map.Entry<String, List<Object[]>> entry : fileContentMap.entrySet()) { //TODO with Stream API
+                for (Map.Entry<String, List<Object[]>> entry : fileContentMap.entrySet()) {
                     if (entry.getKey().equals(goodNameTextField.getText())) {
                         isFound = true;
                         for (int i = 0; i < entry.getValue().size(); i++) {
@@ -108,6 +112,58 @@ public class MyApplication extends JFrame {
             }
         });
 
+        showInfoButtonStreamApi.addActionListener(actionEvent -> {
+            if (goodNameTextField.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(
+                        MyApplication.this,
+                        "Good's name field is empty!",
+                        "Warning",
+                        JOptionPane.WARNING_MESSAGE
+                );
+                goodNameTextField.setText("");
+                infoTextArea.setText("");
+            } else if (fileContentTextArea.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(
+                        MyApplication.this,
+                        "Open file or add info first!",
+                        "Warning",
+                        JOptionPane.WARNING_MESSAGE
+                );
+                goodNameTextField.setText("");
+                infoTextArea.setText("");
+            } else {
+                try {
+                    List<String> exportCountries = new ArrayList<>();
+                    int exportVolume = fileContentMap.entrySet().stream() //TODO with Stream API
+                            .filter(entry -> entry.getKey().equals(goodNameTextField.getText()))
+                            .flatMap(entry -> entry.getValue().stream()) //flattens the list of values for each matching entry into a single stream of values.
+                            .peek(value -> exportCountries.add((String) value[0]))
+                            .mapToInt(value -> (Integer) value[1])
+                            .sum();
+                    if (exportCountries.isEmpty()) {
+                        JOptionPane.showMessageDialog(
+                                MyApplication.this,
+                                "There is no good with the provided name!",
+                                "Warning",
+                                JOptionPane.WARNING_MESSAGE
+                        );
+                        goodNameTextField.setText("");
+                        infoTextArea.setText("");
+                    } else {
+                        String countriesString = String.join(", ", exportCountries);
+                        infoTextArea.setText("import countries: " + countriesString + "\n" + "total exports: " + exportVolume);
+                    }
+                } catch (ClassCastException | NullPointerException e) {
+                    JOptionPane.showMessageDialog(
+                            null,
+                            "Error while casting the data: " + e.getMessage(),
+                            "Warning",
+                            JOptionPane.WARNING_MESSAGE
+                    );
+                }
+            }
+        });
+
         addInfoButton.addActionListener(actionEvent -> {
                 AddWindow addWindow = new AddWindow("Add info", fileContentTextArea, fileContentMap);
                 addWindow.setMinimumSize(new Dimension(500, 200));
@@ -115,14 +171,6 @@ public class MyApplication extends JFrame {
         });
 
         clearButton.addActionListener(actionEvent -> {
-            if (fileContentTextArea.getText().isEmpty()) {
-                JOptionPane.showMessageDialog(
-                        MyApplication.this,
-                        "The file is empty or not opened.",
-                        "Warning",
-                        JOptionPane.WARNING_MESSAGE
-                );
-            }
             fileContentTextArea.setText("");
             infoTextArea.setText("");
             fileContentMap.clear();
@@ -167,9 +215,12 @@ public class MyApplication extends JFrame {
         this.add(goodNameTextField, gbc);
         gbc.gridy = 10;
         gbc.gridx = 0;
-        gbc.gridwidth = 2;
         this.add(showInfoButton, gbc);
+        gbc.gridx = 1;
+        this.add(showInfoButtonStreamApi, gbc);
+        gbc.gridx = 0;
         gbc.gridy = 11;
+        gbc.gridwidth = 2;
         gbc.gridheight = 6;
         this.add(scrollPaneInfo, gbc);
         gbc.gridwidth = 1;
