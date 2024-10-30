@@ -1,4 +1,4 @@
-public class Student implements Comparable <Student> {
+public class Student implements Comparable <Student>, StudentComparator {
     private final String name;
     private final double averageGrade;
 
@@ -12,17 +12,30 @@ public class Student implements Comparable <Student> {
         this.averageGrade = averageGrade;
     }
 
+//    @Override
+//    public int compareTo(Student student) {
+//        int result = Double.compare(this.averageGrade, student.averageGrade);
+//        if (result == 0) {
+//            return this.name.compareTo(student.name);
+//        }
+//        return result;
+//    }
+
     @Override
     public int compareTo(Student student) {
-        int result = Double.compare(this.averageGrade, student.averageGrade);
-        if (result == 0) {
-            return this.name.compareTo(student.name);
-        }
-        return result;
+        return compareByGradeThenName().compare(this, student);
     }
 
     @Override
     public String toString() {
         return name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public double getAverageGrade() {
+        return averageGrade;
     }
 }
