@@ -23,7 +23,7 @@ public class Student implements Comparable <Student>, StudentComparator {
 
     @Override
     public int compareTo(Student student) {
-        return compareByGradeThenName().compare(this, student);
+        return compare(this, student); //TODO Comparator
     }
 
     @Override
