@@ -17,14 +17,17 @@ public class MyApplication extends JFrame {
         this.setLayout(new BorderLayout());
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
+        Font largerFont = new Font("Dialog", Font.BOLD, 16);
         UIManager.put("Button.focus", new ColorUIResource(new Color(0, 0, 0, 0)));
 
         button = new JButton("button");
         button.setSize(100, 50);
         button.setLocation(200, 200);
+        button.setFont(largerFont);
         button.setFocusable(true);
 
         statusBar = new JLabel();
+        statusBar.setFont(largerFont);
 
         centerPanel = new JPanel();
         centerPanel.setLayout(null);
@@ -61,22 +64,27 @@ public class MyApplication extends JFrame {
             }
         });
 
+        button.addMouseMotionListener(new MouseMotionAdapter() {
+            @Override
+            public void mouseMoved(MouseEvent e) {
+                MouseEvent e2 = SwingUtilities.convertMouseEvent(button, e, centerPanel);
+                changeStatusBar(e2.getX(), e2.getY());
+            }
+        });
+
         button.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                if (e.isControlDown()) {
-                    button.addMouseMotionListener(new MouseMotionAdapter() {
-                        @Override
-                        public void mouseDragged(MouseEvent e) {
-                            if (!e.isControlDown()) { //TODO work when ctrl is released
-                                button.removeMouseMotionListener(this);
-                            }
-                            MouseEvent e2 = new MouseEvent(button, e.getID(), e.getWhen(), e.getModifiersEx(), e.getX() + button.getX(), e.getY() + button.getY(), e.getClickCount(), e.isPopupTrigger(), e.getButton()); //TODO understand
+                button.addMouseMotionListener(new MouseMotionAdapter() {
+                    @Override
+                    public void mouseDragged(MouseEvent e) {
+                        MouseEvent e2 = SwingUtilities.convertMouseEvent(button, e, centerPanel);
+                        changeStatusBar(e2.getX(), e2.getY());
+                        if (e2.isControlDown()) {
                             setButtonCoordinates(e2);
-                            changeStatusBar(e2.getX(), e2.getY());
                         }
-                    });
-                }
+                    }
+                });
             }
 
             @Override
@@ -96,9 +104,11 @@ public class MyApplication extends JFrame {
         statusBar.setText("x: " + x + ", y: " + y);
     }
 
-    private void setButtonCoordinates(MouseEvent e) { //TODO understand
-        int newX = Math.min(Math.max(e.getX(), 0), centerPanel.getWidth() - button.getWidth());
-        int newY = Math.min(Math.max(e.getY(), 0), centerPanel.getHeight() - button.getHeight());
+    private void setButtonCoordinates(MouseEvent e) {
+        int newX = e.getXOnScreen() - centerPanel.getLocationOnScreen().x - button.getWidth() / 2;
+        int newY = e.getYOnScreen() - centerPanel.getLocationOnScreen().y - button.getHeight() / 2;
+        newX = Math.min(Math.max(newX, 0), centerPanel.getWidth() - button.getWidth());
+        newY = Math.min(Math.max(newY, 0), centerPanel.getHeight() - button.getHeight());
         button.setLocation(newX, newY);
     }
 }
