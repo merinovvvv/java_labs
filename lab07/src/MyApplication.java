@@ -72,26 +72,13 @@ public class MyApplication extends JFrame {
             }
         });
 
-        button.addMouseListener(new MouseAdapter() {
+        button.addMouseMotionListener(new MouseMotionAdapter() {
             @Override
-            public void mousePressed(MouseEvent e) {
-                button.addMouseMotionListener(new MouseMotionAdapter() {
-                    @Override
-                    public void mouseDragged(MouseEvent e) {
-                        MouseEvent e2 = SwingUtilities.convertMouseEvent(button, e, centerPanel);
-                        changeStatusBar(e2.getX(), e2.getY());
-                        if (e2.isControlDown()) {
-                            setButtonCoordinates(e2);
-                        }
-                    }
-                });
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-                MouseMotionListener[] listeners = button.getMouseMotionListeners();
-                if (listeners.length > 0) {
-                    button.removeMouseMotionListener(listeners[0]);
+            public void mouseDragged(MouseEvent e) {
+                MouseEvent e2 = SwingUtilities.convertMouseEvent(button, e, centerPanel);
+                changeStatusBar(e2.getX(), e2.getY());
+                if (e2.isControlDown()) {
+                    setButtonCoordinates(e2);
                 }
             }
         });
