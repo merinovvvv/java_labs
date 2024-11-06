@@ -1,4 +1,6 @@
-public class Student implements Comparable <Student>, StudentComparator {
+import java.util.Comparator;
+
+public class Student implements Comparable <Student>{
     private final String name;
     private final double averageGrade;
 
@@ -23,7 +25,10 @@ public class Student implements Comparable <Student>, StudentComparator {
 
     @Override
     public int compareTo(Student student) {
-        return compare(this, student); //TODO Comparator
+        return Comparator
+                .comparingDouble(Student::getAverageGrade)
+                .thenComparing(Student::getName)
+                .compare(this, student);
     }
 
     @Override
