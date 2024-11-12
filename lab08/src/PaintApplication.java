@@ -4,6 +4,8 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +16,7 @@ public class PaintApplication extends JFrame {
         private List<Point> currentLine;
         private final List<Color> colors = new ArrayList<>();
         private Color currentColor = Color.BLACK;
+        BufferedImage backgroundImage;
 
         public PaintPanel() {
 
@@ -37,7 +40,10 @@ public class PaintApplication extends JFrame {
             });
         }
 
-        //TODO add saving and opening an image
+        public void clearLinesAndColors() {
+            lines.clear();
+            colors.clear();
+        }
 
         public void setCurrentColor(Color color) {
             this.currentColor = color;
@@ -46,6 +52,10 @@ public class PaintApplication extends JFrame {
         @Override
         public void paintComponent(Graphics graphics) {
             super.paintComponent(graphics);
+
+            if (backgroundImage != null) {
+                graphics.drawImage(backgroundImage, 0, 0, this);
+            }
 
             for (int i = 0; i < lines.size(); i++) {
                 List<Point> line = lines.get(i);
@@ -57,6 +67,11 @@ public class PaintApplication extends JFrame {
                 }
             }
         }
+
+        public void setBackgroundImage(BufferedImage image) {
+           this.backgroundImage = image;
+           repaint();
+        }
     }
 
     JPanel centralPanel;
@@ -64,6 +79,7 @@ public class PaintApplication extends JFrame {
     JButton greenButton;
     JButton blueButton;
     JButton clearButton;
+    JMenuBar menuBar;
 
     PaintApplication(String string) {
 
@@ -71,9 +87,48 @@ public class PaintApplication extends JFrame {
         setLayout(new BorderLayout());
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
+        Font largerFont = new Font("Dialog", Font.BOLD, 16);
+
+        menuBar = new JMenuBar();
+        JMenu fileMenu = new JMenu("File");
+        fileMenu.setFont(largerFont);
+        JMenuItem openItem = new JMenuItem("Open");
+        openItem.setFont(largerFont);
+        JMenuItem saveItem = new JMenuItem("Save");
+        saveItem.setFont(largerFont);
+        fileMenu.add(openItem);
+        fileMenu.add(saveItem);
+        menuBar.add(fileMenu);
+        setJMenuBar(menuBar);
+
+        saveItem.addActionListener(_ -> {
+            try {
+                PaintUtil.saveImage((PaintPanel) centralPanel);
+            }  catch (IOException e) {
+                JOptionPane.showMessageDialog(
+                        null,
+                        "Error while saving an image",
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE
+                );
+            }
+        });
+
+        openItem.addActionListener(_ -> {
+            try {
+                PaintUtil.openImage((PaintPanel) centralPanel);
+            }  catch (IOException e) {
+                JOptionPane.showMessageDialog(
+                        null,
+                        "Error while opening an image",
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE
+                );
+            }
+        });
+
         UIManager.put("Button.focus", new ColorUIResource(new Color(0, 0, 0, 0)));
 
-        Font largerFont = new Font("Dialog", Font.BOLD, 16);
 
         centralPanel = new PaintPanel();
 
@@ -106,6 +161,7 @@ public class PaintApplication extends JFrame {
         clearButton.addActionListener(_ -> {
             ((PaintPanel) centralPanel).lines.clear();
             ((PaintPanel) centralPanel).colors.clear();
+            ((PaintPanel) centralPanel).backgroundImage = null;
             centralPanel.repaint();
         });
 
