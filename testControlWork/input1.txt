@@ -1,0 +1,5 @@
+LED, Arch, 500, 100.0, 10
+Incandescent, CMake, 200, 120.5, 15
+LED, Cister, 100, 127.5, 5
+Incandescent, Cister, 120, 125.0, 50
+Incandescent, Mom, 100, 20.0, 2
