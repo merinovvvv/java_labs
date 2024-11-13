@@ -15,8 +15,8 @@ public class PaintUtil {
             paintPanel.paintComponent(graphics);
             graphics.dispose();
             ImageIO.write(image, "png", file);
-            }
         }
+    }
 
     public static void openImage(PaintApplication.PaintPanel paintPanel) throws IOException {
         paintPanel.clearLinesAndColors();
