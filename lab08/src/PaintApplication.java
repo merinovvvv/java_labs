@@ -16,17 +16,16 @@ public class PaintApplication extends JFrame {
         private List<Point> currentLine;
         private final List<Color> colors = new ArrayList<>();
         private Color currentColor = Color.BLACK;
-        BufferedImage backgroundImage;
+        private BufferedImage image;
 
         public PaintPanel() {
-
             setPreferredSize(new Dimension(2000, 2000));
 
             addMouseMotionListener(new MouseMotionAdapter() {
                 @Override
                 public void mouseDragged(MouseEvent e) {
                     currentLine.add(e.getPoint());
-                    repaint();
+                    updatePanel();
                 }
             });
 
@@ -43,6 +42,7 @@ public class PaintApplication extends JFrame {
         public void clearLinesAndColors() {
             lines.clear();
             colors.clear();
+            image = null;
         }
 
         public void setCurrentColor(Color color) {
@@ -50,27 +50,40 @@ public class PaintApplication extends JFrame {
         }
 
         @Override
-        public void paintComponent(Graphics graphics) {
+        protected void paintComponent(Graphics graphics) {
             super.paintComponent(graphics);
 
-            if (backgroundImage != null) {
-                graphics.drawImage(backgroundImage, 0, 0, this);
-            }
-
-            for (int i = 0; i < lines.size(); i++) {
-                List<Point> line = lines.get(i);
-                graphics.setColor(colors.get(i));
-                for (int j = 1; j < line.size(); j++) {
-                    Point p1 = line.get(j - 1);
-                    Point p2 = line.get(j);
-                    graphics.drawLine(p1.x, p1.y, p2.x, p2.y);
-                }
+            if (image != null) {
+                graphics.drawImage(image, 0, 0, this);
             }
         }
 
-        public void setBackgroundImage(BufferedImage image) {
-           this.backgroundImage = image;
-           repaint();
+        public void updatePanel() {
+
+            if (this.image == null) {
+                this.image = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_ARGB);
+            }
+
+            Graphics g = image.createGraphics();
+
+            for (int i = 0; i < lines.size(); i++) {
+                List<Point> line = lines.get(i);
+                g.setColor(colors.get(i));
+                for (int j = 1; j < line.size(); j++) {
+                    Point p1 = line.get(j - 1);
+                    Point p2 = line.get(j);
+                    g.drawLine(p1.x, p1.y, p2.x, p2.y);
+                }
+            }
+
+            g.dispose();
+
+            Graphics graphics = getGraphics();
+            graphics.drawImage(image, 0, 0, this);
+        }
+
+        public void setImage(BufferedImage image) {
+            this.image = image;
         }
     }
 
@@ -161,8 +174,8 @@ public class PaintApplication extends JFrame {
         clearButton.addActionListener(_ -> {
             ((PaintPanel) centralPanel).lines.clear();
             ((PaintPanel) centralPanel).colors.clear();
-            ((PaintPanel) centralPanel).backgroundImage = null;
-            centralPanel.repaint();
+            ((PaintPanel) centralPanel).image = null;
+            repaint();
         });
 
         JPanel colorButtonPanel = new JPanel();

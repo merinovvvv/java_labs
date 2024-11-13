@@ -10,10 +10,10 @@ public class PaintUtil {
         JFileChooser fileChooser = new JFileChooser();
         if (fileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
             File file = fileChooser.getSelectedFile();
-            BufferedImage image = new BufferedImage(paintPanel.getWidth(), paintPanel.getHeight(), BufferedImage.TYPE_INT_RGB);
-            Graphics graphics = image.createGraphics();
-            paintPanel.paintComponent(graphics);
-            graphics.dispose();
+            BufferedImage image = new BufferedImage(paintPanel.getWidth(), paintPanel.getHeight(), BufferedImage.TYPE_INT_ARGB);
+            Graphics g = image.createGraphics();
+            paintPanel.paint(g); //renders the paintPanel's content onto the image
+            g.dispose();
             ImageIO.write(image, "png", file);
         }
     }
@@ -25,7 +25,8 @@ public class PaintUtil {
         if (fileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
             File file = fileChooser.getSelectedFile();
             BufferedImage image = ImageIO.read(file);
-            paintPanel.setBackgroundImage(image);
+            paintPanel.setImage(image);
+            paintPanel.updatePanel();
         }
     }
 }
