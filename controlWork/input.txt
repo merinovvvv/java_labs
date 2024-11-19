@@ -1,0 +1,6 @@
+Student, Smith, Harvard University, 4.5, 3.8, 2
+Schoolchild, Brown, Lincoln High School, 3.9, 3.5, 10, 4
+Student, Johnson, MIT, 4.8, 4.0, 3
+Schoolchild, Davis, Washington High School, 4.0, 3.6, 11, 5
+Student, Wilson, Stanford University, 4.7, 3.9, 1
+Schoolchild, Martinez, Roosevelt High School, 3.8, 3.4, 9, 3
