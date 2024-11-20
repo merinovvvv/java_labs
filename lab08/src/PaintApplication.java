@@ -6,17 +6,13 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class PaintApplication extends JFrame {
     public static class PaintPanel extends JPanel {
 
-        private final List<List<Point>> lines = new ArrayList<>();
-        private List<Point> currentLine;
-        private final List<Color> colors = new ArrayList<>();
-        private Color currentColor = Color.BLACK;
         private BufferedImage image;
+        private Color currentColor = Color.BLACK;
+        private Point lastPoint = null;
 
         public PaintPanel() {
             setPreferredSize(new Dimension(2000, 2000));
@@ -24,66 +20,74 @@ public class PaintApplication extends JFrame {
             addMouseMotionListener(new MouseMotionAdapter() {
                 @Override
                 public void mouseDragged(MouseEvent e) {
-                    currentLine.add(e.getPoint());
-                    updatePanel();
+                    if (lastPoint != null) {
+                        drawLineOnImageThenPanel(lastPoint, e.getPoint());
+                    }
+                    lastPoint = e.getPoint();
                 }
             });
 
             addMouseListener(new MouseAdapter() {
                 @Override
                 public void mousePressed(MouseEvent e) {
-                    currentLine = new ArrayList<>();
-                    lines.add(currentLine);
-                    colors.add(currentColor);
+                    lastPoint = e.getPoint();
+                }
+
+                @Override
+                public void mouseReleased(MouseEvent e) {
+                    lastPoint = null;
                 }
             });
-        }
-
-        public void clearLinesAndColors() {
-            lines.clear();
-            colors.clear();
-            image = null;
         }
 
         public void setCurrentColor(Color color) {
             this.currentColor = color;
         }
 
-        @Override
-        protected void paintComponent(Graphics graphics) {
-            super.paintComponent(graphics);
+        public void setImage(BufferedImage image) {
+            this.image = image;
+        }
 
+        public void clearImage() {
             if (image != null) {
-                graphics.drawImage(image, 0, 0, this);
+                Graphics g = image.createGraphics();
+                g.setColor(getBackground());
+                g.fillRect(0, 0, image.getWidth(), image.getHeight());
+                g.dispose();
+
+                Graphics g2 = getGraphics();
+                if (g2 != null) {
+                    g2.setColor(getBackground());
+                    g2.fillRect(0, 0, getWidth(), getHeight());
+                    g2.dispose();
+                }
             }
         }
 
-        public void updatePanel() {
-
-            if (this.image == null) {
-                this.image = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_ARGB);
+        private void drawLineOnImageThenPanel(Point start, Point end) {
+            if (image == null) {
+                image = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_ARGB);
             }
 
             Graphics g = image.createGraphics();
-
-            for (int i = 0; i < lines.size(); i++) {
-                List<Point> line = lines.get(i);
-                g.setColor(colors.get(i));
-                for (int j = 1; j < line.size(); j++) {
-                    Point p1 = line.get(j - 1);
-                    Point p2 = line.get(j);
-                    g.drawLine(p1.x, p1.y, p2.x, p2.y);
-                }
-            }
-
+            g.setColor(currentColor);
+            g.drawLine(start.x, start.y, end.x, end.y);
             g.dispose();
 
-            Graphics graphics = getGraphics();
-            graphics.drawImage(image, 0, 0, this);
+            Graphics g2 = getGraphics();
+            if (g2 != null) {
+                g2.setColor(currentColor);
+                g2.drawLine(start.x, start.y, end.x, end.y);
+                g2.dispose();
+            }
         }
 
-        public void setImage(BufferedImage image) {
-            this.image = image;
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            if (image != null) {
+                g.drawImage(image, 0, 0, this);
+            }
         }
     }
 
@@ -94,9 +98,8 @@ public class PaintApplication extends JFrame {
     JButton clearButton;
     JMenuBar menuBar;
 
-    PaintApplication(String string) {
-
-        super(string);
+    PaintApplication(String title) {
+        super(title);
         setLayout(new BorderLayout());
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
@@ -117,7 +120,7 @@ public class PaintApplication extends JFrame {
         saveItem.addActionListener(_ -> {
             try {
                 PaintUtil.saveImage((PaintPanel) centralPanel);
-            }  catch (IOException e) {
+            } catch (IOException e) {
                 JOptionPane.showMessageDialog(
                         null,
                         "Error while saving an image",
@@ -130,7 +133,7 @@ public class PaintApplication extends JFrame {
         openItem.addActionListener(_ -> {
             try {
                 PaintUtil.openImage((PaintPanel) centralPanel);
-            }  catch (IOException e) {
+            } catch (IOException e) {
                 JOptionPane.showMessageDialog(
                         null,
                         "Error while opening an image",
@@ -141,7 +144,6 @@ public class PaintApplication extends JFrame {
         });
 
         UIManager.put("Button.focus", new ColorUIResource(new Color(0, 0, 0, 0)));
-
 
         centralPanel = new PaintPanel();
 
@@ -166,17 +168,9 @@ public class PaintApplication extends JFrame {
         clearButton.setFont(largerFont);
 
         redButton.addActionListener(_ -> ((PaintPanel) centralPanel).setCurrentColor(Color.RED));
-
         greenButton.addActionListener(_ -> ((PaintPanel) centralPanel).setCurrentColor(Color.GREEN));
-
         blueButton.addActionListener(_ -> ((PaintPanel) centralPanel).setCurrentColor(Color.BLUE));
-
-        clearButton.addActionListener(_ -> {
-            ((PaintPanel) centralPanel).lines.clear();
-            ((PaintPanel) centralPanel).colors.clear();
-            ((PaintPanel) centralPanel).image = null;
-            repaint();
-        });
+        clearButton.addActionListener(_ -> ((PaintPanel) centralPanel).clearImage());
 
         JPanel colorButtonPanel = new JPanel();
         colorButtonPanel.add(redButton);
