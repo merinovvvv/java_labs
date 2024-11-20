@@ -2,36 +2,48 @@ import javax.swing.*;
 import java.awt.*;
 
 public class MyApplication3 extends JFrame {
+
+    Icon defaultIcon;
+    Icon rolloverIcon;
+    Icon pressedIcon;
+    Icon selectedIcon;
+
+    JRadioButton radioButton1;
+    JRadioButton radioButton2;
+    JRadioButton radioButton3;
+
     public MyApplication3(String string) {
         super(string);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(new GridBagLayout());
 
-        Icon defaultIcon = new ImageIcon((new ImageIcon("iconsForTask3/avatar.png").getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
-        Icon rolloverIcon = new ImageIcon((new ImageIcon("iconsForTask3/contact.png").getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
-        Icon pressedIcon = new ImageIcon((new ImageIcon("iconsForTask3/call.png").getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
-        Icon selectedIcon = new ImageIcon((new ImageIcon("iconsForTask3/cancel.png").getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
+        Font largerFont = new Font("Dialog", Font.BOLD, 16);
 
-        JRadioButton radioButton1 = new JRadioButton("Button1");
+        defaultIcon = new ImageIcon((new ImageIcon("iconsForTask3/avatar.png").getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
+        rolloverIcon = new ImageIcon((new ImageIcon("iconsForTask3/contact.png").getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
+        pressedIcon = new ImageIcon((new ImageIcon("iconsForTask3/call.png").getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
+        selectedIcon = new ImageIcon((new ImageIcon("iconsForTask3/cancel.png").getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
+
+        radioButton1 = new JRadioButton("Button1");
         radioButton1.setIcon(defaultIcon);
         radioButton1.setRolloverIcon(rolloverIcon);
         radioButton1.setPressedIcon(pressedIcon);
         radioButton1.setSelectedIcon(selectedIcon);
-        radioButton1.setPreferredSize(new Dimension(150, 50));
+        radioButton1.setFont(largerFont);
 
-        JRadioButton radioButton2 = new JRadioButton("Button2");
+        radioButton2 = new JRadioButton("Button2");
         radioButton2.setIcon(defaultIcon);
         radioButton2.setRolloverIcon(rolloverIcon);
         radioButton2.setPressedIcon(pressedIcon);
         radioButton2.setSelectedIcon(selectedIcon);
-        radioButton2.setPreferredSize(new Dimension(150, 50));
+        radioButton2.setFont(largerFont);
 
-        JRadioButton radioButton3 = new JRadioButton("Button3");
+        radioButton3 = new JRadioButton("Button3");
         radioButton3.setIcon(defaultIcon);
         radioButton3.setRolloverIcon(rolloverIcon);
         radioButton3.setPressedIcon(pressedIcon);
         radioButton3.setSelectedIcon(selectedIcon);
-        radioButton3.setPreferredSize(new Dimension(150, 50));
+        radioButton3.setFont(largerFont);
 
         ButtonGroup buttonGroup = new ButtonGroup();
         buttonGroup.add(radioButton1);

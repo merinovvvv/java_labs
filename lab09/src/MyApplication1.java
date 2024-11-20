@@ -71,15 +71,15 @@ public class MyApplication1 extends JFrame {
 
     private void fillTheLists() {
         for (int i = 1; i <= 3; i++) {
-            listModel1.addElement(new JButton("Button # " + i));
-            listModel1.addElement(new JLabel("Label # " + i));
-            listModel1.addElement(new JTextField("TextField # " + i));
+            listModel1.addElement(new JButton("Button #" + i));
+            listModel1.addElement(new JLabel("Label #" + i));
+            listModel1.addElement(new JTextField("TextField #" + i));
         }
 
         for (int i = 4; i <= 6; i++) {
-            listModel2.addElement(new JButton("Button # " + i));
-            listModel2.addElement(new JLabel("Label # " + i));
-            listModel2.addElement(new JTextField("TextField # " + i));
+            listModel2.addElement(new JButton("Button #" + i));
+            listModel2.addElement(new JLabel("Label #" + i));
+            listModel2.addElement(new JTextField("TextField #" + i));
         }
     }
 

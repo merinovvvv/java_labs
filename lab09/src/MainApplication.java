@@ -15,7 +15,10 @@ public class MainApplication extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
+        Font largerFont = new Font("Dialog", Font.BOLD, 16);
+
         tabbedPane = new JTabbedPane();
+        tabbedPane.setFont(largerFont);
 
         myApplication1 = new MyApplication1("task1");
         myApplication2 = new MyApplication2("task2");
