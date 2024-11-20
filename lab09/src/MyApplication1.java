@@ -90,17 +90,17 @@ public class MyApplication1 extends JFrame {
                 value.setBackground(list.getSelectionBackground());
                 value.setForeground(list.getSelectionForeground());
                 value.setOpaque(true);
-                if (value instanceof JButton) {
-                    ((JButton) value).setContentAreaFilled(false);
-                    ((JButton) value).setBorderPainted(false);
+                if (value instanceof AbstractButton) {
+                    ((AbstractButton) value).setContentAreaFilled(false);
+                    ((AbstractButton) value).setBorderPainted(false);
                 }
             } else {
                 value.setBackground(list.getBackground());
                 value.setForeground(list.getForeground());
                 value.setOpaque(false);
-                if (value instanceof JButton) {
-                    ((JButton) value).setContentAreaFilled(true);
-                    ((JButton) value).setBorderPainted(true);
+                if (value instanceof AbstractButton) {
+                    ((AbstractButton) value).setContentAreaFilled(true);
+                    ((AbstractButton) value).setBorderPainted(true);
                 }
             }
             return value;
