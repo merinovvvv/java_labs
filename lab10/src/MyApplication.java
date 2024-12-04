@@ -18,11 +18,9 @@ public class MyApplication extends JFrame {
     Set<String> setB;
     JTextField elemToAddTextField;
 
-    JButton addAButton;
-    JButton addBButton;
+    JButton addButton;
 
-    JButton clearAButton;
-    JButton clearBButton;
+    JButton clearButton;
 
     JButton removeButton;
 
@@ -33,6 +31,10 @@ public class MyApplication extends JFrame {
     JButton intersectButton;
     JButton differenceABButton;
 
+    JRadioButton setAButton;
+    JRadioButton setBButton;
+    ButtonGroup setGroup;
+
     MyApplication(String string) {
         super(string);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -40,27 +42,22 @@ public class MyApplication extends JFrame {
 
         Font largerFont = new Font("Dialog", Font.BOLD, 16);
         UIManager.put("Button.focus", new ColorUIResource(new Color(0, 0, 0, 0)));
+        UIManager.put("RadioButton.focus", new ColorUIResource(new Color(0, 0, 0, 0)));
 
         setA = new Set<>();
         setB = new Set<>();
 
-        listModelA = new DefaultListModel<>();
-        listA = new JList<>(listModelA);
+        listA = setA.toJList();
 
-        listModelB = new DefaultListModel<>();
-        listB = new JList<>(listModelB);
+        listB = setB.toJList();
 
         elemToAddTextField = new JTextField();
 
-        addAButton = new JButton("add element");
-        addAButton.setEnabled(false);
-        addBButton = new JButton("add element");
-        addBButton.setEnabled(false);
+        addButton = new JButton("add element");
+        addButton.setEnabled(false);
 
-        clearAButton = new JButton("clear");
-        clearAButton.setEnabled(false);
-        clearBButton = new JButton("clear");
-        clearBButton.setEnabled(false);
+        clearButton = new JButton("clear");
+        clearButton.setEnabled(false);
         removeButton = new JButton("remove element");
         removeButton.setEnabled(false);
 
@@ -109,18 +106,19 @@ public class MyApplication extends JFrame {
 
             private void toggleButtonState() {
                 boolean isTextFieldEmpty = elemToAddTextField.getText().trim().isEmpty();
-                addAButton.setEnabled(!isTextFieldEmpty);
-                addBButton.setEnabled(!isTextFieldEmpty);
+                addButton.setEnabled(!isTextFieldEmpty);
             }
         });
 
-        addAButton.addActionListener(_ -> addElementsToSetAndList(setA, listA, clearAButton));
+        setAButton = new JRadioButton("Set A");
+        setBButton = new JRadioButton("Set B");
+        setGroup = new ButtonGroup();
+        setGroup.add(setAButton);
+        setGroup.add(setBButton);
 
-        addBButton.addActionListener(_ -> addElementsToSetAndList(setB, listB, clearBButton));
+        addButton.addActionListener(_ -> addElementsToSetAndList());
 
-        clearAButton.addActionListener(_ -> clearSetAndList(setA, listA, clearAButton));
-
-        clearBButton.addActionListener(_ -> clearSetAndList(setB, listB, clearBButton));
+        clearButton.addActionListener(_ -> clearSetAndList());
 
         removeButton.addActionListener(_ -> removeSelectedElementsFromLists());
 
@@ -144,58 +142,67 @@ public class MyApplication extends JFrame {
 
         gbc.gridy = 5;
         gbc.gridx = 0;
-        gbc.gridwidth = 2;
         gbc.gridheight = 1;
-        add(elemToAddTextField, gbc);
+        add(setAButton, gbc);
+        gbc.gridx = 1;
+        add(setBButton, gbc);
+
+        gbc.gridx = 0;
         gbc.gridy = 6;
-        gbc.gridwidth = 1;
-        add(addAButton, gbc);
-        gbc.gridx = 1;
-        add(addBButton, gbc);
-
-        gbc.gridx = 0;
-        gbc.gridy = 7;
-        add(clearAButton, gbc);
-        gbc.gridx = 1;
-        add(clearBButton, gbc);
-
-        gbc.gridx = 0;
-        gbc.gridy = 8;
         gbc.gridwidth = 2;
-        add(removeButton, gbc);
+        add(elemToAddTextField, gbc);
+
+        gbc.gridy = 7;
+        add(addButton, gbc);
+
+        gbc.gridy = 8;
+        add(clearButton, gbc);
 
         gbc.gridy = 9;
+        add(removeButton, gbc);
+
+        gbc.gridy = 10;
         gbc.fill = GridBagConstraints.NONE;
         add(setOperationsLabel, gbc);
 
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.gridy = 10;
+        gbc.gridy = 11;
         add(resultTextField, gbc);
 
-        gbc.gridy = 11;
+        gbc.gridy = 12;
         add(uniteButton, gbc);
 
-        gbc.gridy = 12;
+        gbc.gridy = 13;
         add(intersectButton, gbc);
 
-        gbc.gridy = 13;
+        gbc.gridy = 14;
         add(differenceABButton, gbc);
     }
 
-    private void addElementsToSetAndList(Set<String> set, JList<String> list, JButton clearButton) {
+    private void addElementsToSetAndList() {
         StringTokenizer st = new StringTokenizer(elemToAddTextField.getText());
         List<String> tokens = new ArrayList<>();
         while (st.hasMoreTokens()) {
             tokens.add(st.nextToken());
         }
-        set.addAll(tokens);
-        list.setModel(set.toJList().getModel());
+        if (setAButton.isSelected()) {
+            setA.addAll(tokens);
+            listA = setA.toJList();
+        } else {
+            setB.addAll(tokens);
+            listB = setB.toJList();
+        }
         clearButton.setEnabled(true);
     }
 
-    private void clearSetAndList(Set<String> set, JList<String> list, JButton clearButton) {
-        set.clear();
-        list.setModel(set.toJList().getModel());
+    private void clearSetAndList() {
+        if (setAButton.isSelected()) {
+            setA.clear();
+            listA = setA.toJList();
+        } else {
+            setB.clear();
+            listB = setB.toJList();
+        }
         clearButton.setEnabled(false);
         removeButton.setEnabled(false);
     }
@@ -211,16 +218,11 @@ public class MyApplication extends JFrame {
             setB.remove(value);
         }
 
-        listA.setModel(setA.toJList().getModel());
-        listB.setModel(setB.toJList().getModel());
+        listA = setA.toJList();
+        listB = setB.toJList();
 
-        if (setA.isEmpty()) {
-            clearAButton.setEnabled(false);
-        }
-        if (setB.isEmpty()) {
-            clearBButton.setEnabled(false);
-        }
         if (setA.isEmpty() && setB.isEmpty()) {
+            clearButton.setEnabled(false);
             removeButton.setEnabled(false);
         }
     }

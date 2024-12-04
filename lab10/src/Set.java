@@ -51,13 +51,11 @@ public class Set<T> implements Aggregate<T>{
     }
 
     public JList<T> toJList() {
-        JList<T> jlist = new JList<>();
         DefaultListModel<T> listModel = new DefaultListModel<>();
         for (T element : list) {
             listModel.addElement(element);
         }
-        jlist.setModel(listModel);
-        return jlist;
+        return new JList<>(listModel);
     }
 
     void add(T value) {
