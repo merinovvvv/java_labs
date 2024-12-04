@@ -189,13 +189,13 @@ public class MyApplication extends JFrame {
             tokens.add(st.nextToken());
         }
         set.addAll(tokens);
-        list.setModel(set.toListModel());
+        list.setModel(set.toJList().getModel());
         clearButton.setEnabled(true);
     }
 
     private void clearSetAndList(Set<String> set, JList<String> list, JButton clearButton) {
         set.clear();
-        list.setModel(set.toListModel());
+        list.setModel(set.toJList().getModel());
         clearButton.setEnabled(false);
         removeButton.setEnabled(false);
     }
@@ -211,8 +211,8 @@ public class MyApplication extends JFrame {
             setB.remove(value);
         }
 
-        listA.setModel(setA.toListModel());
-        listB.setModel(setB.toListModel());
+        listA.setModel(setA.toJList().getModel());
+        listB.setModel(setB.toJList().getModel());
 
         if (setA.isEmpty()) {
             clearAButton.setEnabled(false);

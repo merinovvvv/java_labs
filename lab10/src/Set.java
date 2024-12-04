@@ -50,12 +50,14 @@ public class Set<T> implements Aggregate<T>{
         return stringBuilder.toString();
     }
 
-    public DefaultListModel<T> toListModel() {
+    public JList<T> toJList() {
+        JList<T> jlist = new JList<>();
         DefaultListModel<T> listModel = new DefaultListModel<>();
         for (T element : list) {
             listModel.addElement(element);
         }
-        return listModel;
+        jlist.setModel(listModel);
+        return jlist;
     }
 
     void add(T value) {
