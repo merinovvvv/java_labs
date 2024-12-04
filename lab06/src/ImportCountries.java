@@ -59,7 +59,7 @@ public class ImportCountries {
 
     static void countrySetCheck(String[] parts, JTextArea fileContentTextArea, ImportCountries importCountries) {
 
-        boolean isInCountrySet = importCountries.getImportCountries().stream() //TODO with Stream API
+        boolean isInCountrySet = importCountries.getImportCountries().stream()
                 .anyMatch(country -> parts[1].equals(country));
 
         if (!isInCountrySet) {

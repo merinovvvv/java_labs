@@ -48,7 +48,7 @@ public class GoodsForExport {
             );
             fileContentTextArea.setText("");
         } catch (NumberFormatException e) {
-            boolean isInGoodsSet = goodsForExport.getExportGoods().stream() //TODO with Stream API
+            boolean isInGoodsSet = goodsForExport.getExportGoods().stream()
                     .anyMatch(good -> parts[0].equals(good));
 
             if (!isInGoodsSet) {

@@ -1,10 +1,13 @@
+import strategies.InfoRetrievalStrategy;
+import strategies.LoopRetrievalStrategy;
+import strategies.StreamApiRetrievalStrategy;
+
 import javax.swing.*;
 import javax.swing.plaf.ColorUIResource;
 import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
-import java.util.ArrayList;
 
 public class MyApplication extends JFrame {
 
@@ -21,6 +24,8 @@ public class MyApplication extends JFrame {
 
     ImportCountries importCountries;
     GoodsForExport goodsForExport;
+
+    InfoRetrievalStrategy strategy;
 
     MyApplication(String string) {
         super(string);
@@ -64,17 +69,23 @@ public class MyApplication extends JFrame {
         addInfoButton = new JButton("add info");
         addInfoButton.setFont(largerFont);
 
-        showInfoButton.addActionListener(actionEvent -> setShowInfoButtonCommon(false));
+        showInfoButton.addActionListener(_ -> { //TODO Strategy init
+            strategy = new LoopRetrievalStrategy();
+            setShowInfoButtonCommon();
+        });
 
-        showInfoButtonStreamApi.addActionListener(actionEvent -> setShowInfoButtonCommon(true));
+        showInfoButtonStreamApi.addActionListener(_ -> { //TODO Strategy init
+            strategy = new StreamApiRetrievalStrategy();
+            setShowInfoButtonCommon();
+        });
 
-        addInfoButton.addActionListener(actionEvent -> {
+        addInfoButton.addActionListener(_ -> {
                 AddWindow addWindow = new AddWindow("Add info", fileContentTextArea, fileContentMap);
                 addWindow.setMinimumSize(new Dimension(500, 200));
                 addWindow.setVisible(true);
         });
 
-        clearButton.addActionListener(actionEvent -> {
+        clearButton.addActionListener(_ -> {
             fileContentTextArea.setText("");
             infoTextArea.setText("");
             fileContentMap.clear();
@@ -91,7 +102,7 @@ public class MyApplication extends JFrame {
         fileMenu.setFont(largerFont);
         JMenuItem openItem = new JMenuItem("Open");
         openItem.setFont(largerFont);
-        openItem.addActionListener(actionEvent -> FileParse.openFile(fileContentTextArea, fileContentMap, importCountries, goodsForExport));
+        openItem.addActionListener(_ -> FileParse.openFile(fileContentTextArea, fileContentMap, importCountries, goodsForExport));
 
         fileMenu.add(openItem);
         menuBar.add(fileMenu);
@@ -131,83 +142,42 @@ public class MyApplication extends JFrame {
         gbc.gridheight = 1;
     }
 
-    private void setShowInfoButtonCommon(boolean b) {
-        if (goodNameTextField.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(
-                    MyApplication.this,
-                    "Good's name field is empty!",
-                    "Warning",
-                    JOptionPane.WARNING_MESSAGE
-            );
-            goodNameTextField.setText("");
-            infoTextArea.setText("");
-        } else if (fileContentTextArea.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(
-                    MyApplication.this,
-                    "Open file or add info first!",
-                    "Warning",
-                    JOptionPane.WARNING_MESSAGE
-            );
-            goodNameTextField.setText("");
-            infoTextArea.setText("");
-        } else {
-            if (b) {
-                try {
-                    List<String> exportCountries = new ArrayList<>();
-                    int exportVolume = fileContentMap.entrySet().stream() //TODO with Stream API
-                            .filter(entry -> entry.getKey().equals(goodNameTextField.getText()))
-                            .flatMap(entry -> entry.getValue().stream()) //flattens the list of values for each matching entry into a single stream of values.
-                            .peek(value -> exportCountries.add((String) value[0]))
-                            .mapToInt(value -> (Integer) value[1])
-                            .sum();
-                    if (exportCountries.isEmpty()) {
-                        JOptionPane.showMessageDialog(
-                                MyApplication.this,
-                                "There is no good with the provided name!",
-                                "Warning",
-                                JOptionPane.WARNING_MESSAGE
-                        );
-                        goodNameTextField.setText("");
-                        infoTextArea.setText("");
-                    } else {
-                        String countriesString = String.join(", ", exportCountries);
-                        infoTextArea.setText("import countries: " + countriesString + "\n" + "total exports: " + exportVolume);
-                    }
-                } catch (ClassCastException | NullPointerException e) {
-                    JOptionPane.showMessageDialog(
-                            null,
-                            "Error while casting the data: " + e.getMessage(),
-                            "Warning",
-                            JOptionPane.WARNING_MESSAGE
-                    );
-                }
-            } else {
-                List<String> exportCountries = new ArrayList<>(List.of());
-                int exportVolume = 0;
-                boolean isFound = false;
-                for (Map.Entry<String, List<Object[]>> entry : fileContentMap.entrySet()) {
-                    if (entry.getKey().equals(goodNameTextField.getText())) {
-                        isFound = true;
-                        for (int i = 0; i < entry.getValue().size(); i++) {
-                            exportCountries.add((String) entry.getValue().get(i)[0]);
-                            exportVolume += (Integer) entry.getValue().get(i)[1];
-                        }
-                    }
-                }
-                if (!isFound) {
-                    JOptionPane.showMessageDialog(
-                            MyApplication.this,
-                            "There is no good with the provided name!",
-                            "Warning",
-                            JOptionPane.WARNING_MESSAGE
-                    );
-                    goodNameTextField.setText("");
-                    infoTextArea.setText("");
-                } else {
-                    String countriesString = String.join(", ", exportCountries);
-                    infoTextArea.setText("import countries: " + countriesString + "\n" + "total exports: " + exportVolume);
-                }
+    private void setShowInfoButtonCommon() {
+        try {
+            String goodName = goodNameTextField.getText();
+            if (goodName.isEmpty()) {
+                JOptionPane.showMessageDialog(
+                        MyApplication.this,
+                        "Good's name field is empty!",
+                        "Warning",
+                        JOptionPane.WARNING_MESSAGE
+                );
+                goodNameTextField.setText("");
+                infoTextArea.setText("");
+                return;
             }
+
+            if (fileContentMap.isEmpty()) {
+                JOptionPane.showMessageDialog(
+                        MyApplication.this,
+                        "Open file or add info first!",
+                        "Warning",
+                        JOptionPane.WARNING_MESSAGE
+                );
+                goodNameTextField.setText("");
+                infoTextArea.setText("");
+                return;
+            }
+
+            String result = strategy.getInfo(goodName, fileContentMap); //TODO Strategy usage
+            infoTextArea.setText(result);
+        } catch (ClassCastException | NullPointerException e) {
+            JOptionPane.showMessageDialog(
+                    null,
+                    "Error while casting the data: " + e.getMessage(),
+                    "Warning",
+                    JOptionPane.WARNING_MESSAGE
+            );
         }
     }
 }

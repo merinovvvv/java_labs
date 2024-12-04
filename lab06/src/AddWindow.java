@@ -154,9 +154,9 @@ public class AddWindow extends JFrame {
             }
         });
 
-        addButton.addActionListener(actionEvent -> {
+        addButton.addActionListener(_ -> {
             try {
-                fileContentMap.computeIfAbsent(goodNameTextField.getText(), k -> new ArrayList<>())
+                fileContentMap.computeIfAbsent(goodNameTextField.getText(), _ -> new ArrayList<>())
                         .add(new Object[]{countryNameTextField.getText(), Integer.parseInt(exportVolumeTextField.getText())});
                 fileContentTextArea.append(goodNameTextField.getText() + ", " + countryNameTextField.getText() +
                             ", " + exportVolumeTextField.getText() + "\n");

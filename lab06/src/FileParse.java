@@ -37,7 +37,6 @@ public class FileParse {
             }
             fileContentTextArea.append(fileContent.toString());
             try {
-                //fillMap(fileContentTextArea, fileContentMap, importCountries, goodsForExport);
                 fillMapStreamApi(fileContentTextArea, fileContentMap, importCountries, goodsForExport);
             }  catch (NumberFormatException exception) {
                 JOptionPane.showMessageDialog(
@@ -51,21 +50,10 @@ public class FileParse {
         }
     }
 
-    static void fillMap(JTextArea fileContentTextArea, Map<String, List<Object[]>> fileContentMap, ImportCountries importCountries, GoodsForExport goodsForExport) throws NumberFormatException{
+    static void fillMapStreamApi(JTextArea fileContentTextArea, Map<String, List<Object[]>> fileContentMap, ImportCountries importCountries, GoodsForExport goodsForExport) throws NumberFormatException{
         fileContentMap.clear();
         String[] lines = fileContentTextArea.getText().split("\n");
-        for (String line : lines) {
-            String[] parts = line.split(", ");
-            if (parts.length == 3) {
-                fillMapCommon(fileContentTextArea, fileContentMap, importCountries, goodsForExport, parts);
-            }
-        }
-    }
-
-    static void fillMapStreamApi(JTextArea fileContentTextArea, Map<String, List<Object[]>> fileContentMap, ImportCountries importCountries, GoodsForExport goodsForExport) throws NumberFormatException{ //TODO uses Stream api
-        fileContentMap.clear();
-        String[] lines = fileContentTextArea.getText().split("\n");
-        Arrays.stream(lines) //TODO with Stream API
+        Arrays.stream(lines)
                 .map(line -> line.split(", "))
                 .filter(parts -> parts.length == 3)
                 .forEach(parts -> fillMapCommon(fileContentTextArea, fileContentMap, importCountries, goodsForExport, parts));
@@ -78,7 +66,7 @@ public class FileParse {
         String key = parts[0];
         String country = parts[1];
         int volume = Integer.parseInt(parts[2]);
-        fileContentMap.computeIfAbsent(key, k -> new ArrayList<>())
+        fileContentMap.computeIfAbsent(key, _ -> new ArrayList<>())
                 .add(new Object[]{country, volume});
     }
 }
