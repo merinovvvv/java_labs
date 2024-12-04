@@ -1,3 +1,5 @@
+package models;
+
 import javax.swing.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -5,7 +7,7 @@ import java.util.Set;
 public class GoodsForExport {
     private final Set<String> exportGoods;
 
-    GoodsForExport() {
+    public GoodsForExport() {
         exportGoods = new HashSet<>();
         exportGoods.add("Apples");
         exportGoods.add("Pears");
@@ -37,7 +39,7 @@ public class GoodsForExport {
         exportGoods.add(good);
     }
 
-    static void goodSetCheck(String[] parts, JTextArea fileContentTextArea, GoodsForExport goodsForExport) {
+    public static void goodSetCheck(String[] parts, JTextArea fileContentTextArea, GoodsForExport goodsForExport) {
         try {
             Integer.parseInt(parts[0]);
             JOptionPane.showMessageDialog(

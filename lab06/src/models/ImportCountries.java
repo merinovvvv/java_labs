@@ -1,3 +1,5 @@
+package models;
+
 import javax.swing.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -5,7 +7,7 @@ import java.util.Set;
 public class ImportCountries {
     private final Set<String> importCountries;
 
-    ImportCountries() {
+    public ImportCountries() {
         importCountries = new HashSet<>();
         importCountries.add("USA");
         importCountries.add("Canada");
@@ -57,7 +59,7 @@ public class ImportCountries {
         importCountries.add(country);
     }
 
-    static void countrySetCheck(String[] parts, JTextArea fileContentTextArea, ImportCountries importCountries) {
+    public static void countrySetCheck(String[] parts, JTextArea fileContentTextArea, ImportCountries importCountries) {
 
         boolean isInCountrySet = importCountries.getImportCountries().stream()
                 .anyMatch(country -> parts[1].equals(country));

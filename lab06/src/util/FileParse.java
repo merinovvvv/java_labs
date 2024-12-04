@@ -1,3 +1,8 @@
+package util;
+
+import models.ImportCountries;
+import models.GoodsForExport;
+
 import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.File;
@@ -10,7 +15,7 @@ import java.util.Map;
 
 public class FileParse {
 
-    static void openFile(JTextArea fileContentTextArea, Map<String, List<Object[]>> fileContentMap, ImportCountries importCountries, GoodsForExport goodsForExport) {
+    public static void openFile(JTextArea fileContentTextArea, Map<String, List<Object[]>> fileContentMap, ImportCountries importCountries, GoodsForExport goodsForExport) {
         JFileChooser fileChooser = new JFileChooser();
         int result = fileChooser.showOpenDialog(null);
         if (result == JFileChooser.APPROVE_OPTION) {
