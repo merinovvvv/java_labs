@@ -1,5 +1,7 @@
+package model;
+
 public class EmptySetException extends RuntimeException {
     public EmptySetException() {
-        super("Set is empty.");
+        super("model.Set is empty.");
     }
 }

@@ -1,11 +1,18 @@
+package model;
+
+import iterator.Aggregate;
+import iterator.Iterator;
+import visitor.Element;
+import visitor.Visitor;
+
 import javax.swing.*;
 import java.util.*;
 
-public class Set<T> implements Aggregate<T>{
+public class Set<T> implements Aggregate<T>, Element<T> {
 
     List<T> list;
 
-    Set() {
+    public Set() {
         list = new ArrayList<>();
     }
 
@@ -23,11 +30,11 @@ public class Set<T> implements Aggregate<T>{
         return list.size();
     }
 
-    boolean isEmpty() {
+    public boolean isEmpty() {
         return list.isEmpty();
     }
 
-    void clear() {
+    public void clear() {
         list.clear();
     }
 
@@ -64,14 +71,14 @@ public class Set<T> implements Aggregate<T>{
         }
     }
 
-    void remove(T value) {
+    public void remove(T value) {
         if (isEmpty()) {
             throw new EmptySetException();
         }
         list.remove(value);
     }
 
-    void addAll(Collection<? extends T> collection) {
+    public void addAll(Collection<? extends T> collection) {
         for (T element : collection) {
             if (!list.contains(element)) {
                 list.add(element);
@@ -79,7 +86,7 @@ public class Set<T> implements Aggregate<T>{
         }
     }
 
-    Set<T> unite(Set<? extends T> anotherSet) {
+    public Set<T> unite(Set<? extends T> anotherSet) {
         Set<T> unitedSet = new Set<>();
         unitedSet.list.addAll(list);
         Iterator<? extends T> iterator = anotherSet.createIterator();
@@ -92,7 +99,7 @@ public class Set<T> implements Aggregate<T>{
         return unitedSet;
     }
 
-    Set<T> intersect(Set<? extends T> anotherSet) {
+    public Set<T> intersect(Set<? extends T> anotherSet) {
         Set<T> intersectionSet = new Set<>();
         Iterator<? extends T> iterator = anotherSet.createIterator();
         while(!iterator.isDone()) {
@@ -104,7 +111,7 @@ public class Set<T> implements Aggregate<T>{
         return intersectionSet;
     }
 
-    Set<T> difference(Set<? extends T> anotherSet) {
+    public Set<T> difference(Set<? extends T> anotherSet) {
         Set<T> differenceSet = new Set<>();
         Iterator<? extends T> iterator = createIterator();
         while(!iterator.isDone()) {
@@ -142,5 +149,10 @@ public class Set<T> implements Aggregate<T>{
                 return list.get(index);
             }
         };
+    }
+
+    @Override
+    public void accept(Visitor<T> visitor) {
+        visitor.visit(this);
     }
 }

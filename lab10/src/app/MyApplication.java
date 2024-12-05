@@ -1,3 +1,7 @@
+package app;
+
+import model.Set;
+
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -11,8 +15,8 @@ public class MyApplication extends JFrame {
 
     JList<String> listA;
     JList<String> listB;
-    DefaultListModel<String> listModelA;
-    DefaultListModel<String> listModelB;
+//    DefaultListModel<String> listModelA;
+//    DefaultListModel<String> listModelB;
 
     Set<String> setA;
     Set<String> setB;
@@ -110,8 +114,8 @@ public class MyApplication extends JFrame {
             }
         });
 
-        setAButton = new JRadioButton("Set A");
-        setBButton = new JRadioButton("Set B");
+        setAButton = new JRadioButton("model.Set A");
+        setBButton = new JRadioButton("model.Set B");
         setGroup = new ButtonGroup();
         setGroup.add(setAButton);
         setGroup.add(setBButton);
