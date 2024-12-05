@@ -1,3 +1,9 @@
+package app;
+
+import subjects.KeyPressSubject;
+import observers.KeyLogDisplay;
+import observers.LargeKeyDisplay;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;

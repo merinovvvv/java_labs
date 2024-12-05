@@ -1,10 +1,12 @@
+package observers;
+
 import javax.swing.*;
 
 public class LargeKeyDisplay implements Observer {
 
     JLabel label;
 
-    LargeKeyDisplay(JLabel label) {
+    public LargeKeyDisplay(JLabel label) {
         this.label = label;
     }
 

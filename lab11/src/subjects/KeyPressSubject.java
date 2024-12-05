@@ -1,3 +1,7 @@
+package subjects;
+
+import observers.Observer;
+
 import java.util.ArrayList;
 import java.util.List;
 
