@@ -1,4 +1,4 @@
-package model;
+package exceptions;
 
 public class EmptySetException extends RuntimeException {
     public EmptySetException() {

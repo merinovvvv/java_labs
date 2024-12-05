@@ -1,10 +1,10 @@
 package model;
 
+import exceptions.EmptySetException;
 import iterator.Aggregate;
 import iterator.Iterator;
 import visitor.Element;
 import visitor.Visitor;
-
 import javax.swing.*;
 import java.util.*;
 
@@ -14,6 +14,10 @@ public class Set<T> implements Aggregate<T>, Element<T> {
 
     public Set() {
         list = new ArrayList<>();
+    }
+
+    public Set(Set<? extends T> otherSet) {
+        list = new ArrayList<>(otherSet.list);
     }
 
     @SafeVarargs
