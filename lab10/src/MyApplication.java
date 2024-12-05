@@ -78,13 +78,13 @@ public class MyApplication extends JFrame {
 
         listA.addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting()) {
-                removeButton.setEnabled(!listA.isSelectionEmpty());
+                removeButton.setEnabled(!listA.isSelectionEmpty() || !listB.isSelectionEmpty());
             }
         });
 
         listB.addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting()) {
-                removeButton.setEnabled(!listB.isSelectionEmpty());
+                removeButton.setEnabled(!listA.isSelectionEmpty() || !listB.isSelectionEmpty());
             }
         });
 
@@ -187,10 +187,10 @@ public class MyApplication extends JFrame {
         }
         if (setAButton.isSelected()) {
             setA.addAll(tokens);
-            listA = setA.toJList();
+            listA.setModel(setA.toJList().getModel());
         } else {
             setB.addAll(tokens);
-            listB = setB.toJList();
+            listB.setModel(setB.toJList().getModel());
         }
         clearButton.setEnabled(true);
     }
@@ -198,13 +198,20 @@ public class MyApplication extends JFrame {
     private void clearSetAndList() {
         if (setAButton.isSelected()) {
             setA.clear();
-            listA = setA.toJList();
+            listA.setModel(setA.toJList().getModel());
         } else {
             setB.clear();
-            listB = setB.toJList();
+            listB.setModel(setB.toJList().getModel());
         }
-        clearButton.setEnabled(false);
-        removeButton.setEnabled(false);
+
+        isEmptySets();
+    }
+
+    private void isEmptySets() {
+        if (setA.isEmpty() && setB.isEmpty()) {
+            clearButton.setEnabled(false);
+            removeButton.setEnabled(false);
+        }
     }
 
     private void removeSelectedElementsFromLists() {
@@ -218,12 +225,9 @@ public class MyApplication extends JFrame {
             setB.remove(value);
         }
 
-        listA = setA.toJList();
-        listB = setB.toJList();
+        listA.setModel(setA.toJList().getModel());
+        listB.setModel(setB.toJList().getModel());
 
-        if (setA.isEmpty() && setB.isEmpty()) {
-            clearButton.setEnabled(false);
-            removeButton.setEnabled(false);
-        }
+        isEmptySets();
     }
 }
