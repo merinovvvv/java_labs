@@ -15,8 +15,6 @@ public class MyApplication extends JFrame {
 
     JList<String> listA;
     JList<String> listB;
-//    DefaultListModel<String> listModelA;
-//    DefaultListModel<String> listModelB;
 
     Set<String> setA;
     Set<String> setB;
@@ -114,8 +112,8 @@ public class MyApplication extends JFrame {
             }
         });
 
-        setAButton = new JRadioButton("model.Set A");
-        setBButton = new JRadioButton("model.Set B");
+        setAButton = new JRadioButton("Set A");
+        setBButton = new JRadioButton("Set B");
         setGroup = new ButtonGroup();
         setGroup.add(setAButton);
         setGroup.add(setBButton);
