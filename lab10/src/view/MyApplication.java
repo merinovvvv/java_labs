@@ -1,5 +1,6 @@
 package view;
 
+import controller.SetController;
 import model.Set;
 import visitor.DifferenceVisitor;
 import visitor.IntersectionVisitor;
@@ -81,69 +82,12 @@ public class MyApplication extends JFrame {
         scrollPaneA.setPreferredSize(new Dimension(150, 200));
         scrollPaneB.setPreferredSize(new Dimension(150, 200));
 
-        listA.addListSelectionListener(e -> {
-            if (!e.getValueIsAdjusting()) {
-                removeButton.setEnabled(!listA.isSelectionEmpty() || !listB.isSelectionEmpty());
-            }
-        });
-
-        listB.addListSelectionListener(e -> {
-            if (!e.getValueIsAdjusting()) {
-                removeButton.setEnabled(!listA.isSelectionEmpty() || !listB.isSelectionEmpty());
-            }
-        });
-
-        elemToAddTextField.getDocument().addDocumentListener(new DocumentListener() {
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-                toggleButtonState();
-            }
-
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-                toggleButtonState();
-            }
-
-            @Override
-            public void changedUpdate(DocumentEvent e) {
-                toggleButtonState();
-            }
-
-            private void toggleButtonState() {
-                boolean isTextFieldEmpty = elemToAddTextField.getText().trim().isEmpty();
-                addButton.setEnabled(!isTextFieldEmpty);
-            }
-        });
-
         setAButton = new JRadioButton("Set A");
         setBButton = new JRadioButton("Set B");
         setGroup = new ButtonGroup();
         setGroup.add(setAButton);
         setGroup.add(setBButton);
 
-        addButton.addActionListener(_ -> addElementsToSetAndList());
-
-        clearButton.addActionListener(_ -> clearSetAndList());
-
-        removeButton.addActionListener(_ -> removeSelectedElementsFromLists());
-
-        uniteButton.addActionListener(_ -> {
-            UnionVisitor<String> unionVisitor = new UnionVisitor<>(setA);
-            setB.accept(unionVisitor);
-            resultTextField.setText(unionVisitor.getResult().toString());
-        });
-
-        intersectButton.addActionListener(_ -> {
-            IntersectionVisitor<String> intersectionVisitor = new IntersectionVisitor<>(setA);
-            setB.accept(intersectionVisitor);
-            resultTextField.setText(intersectionVisitor.getResult().toString());
-        });
-
-        differenceABButton.addActionListener(_ -> {
-            DifferenceVisitor<String> differenceVisitor = new DifferenceVisitor<>(setA);
-            setB.accept(differenceVisitor);
-            resultTextField.setText(differenceVisitor.getResult().toString());
-        });
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
@@ -194,57 +138,51 @@ public class MyApplication extends JFrame {
 
         gbc.gridy = 14;
         add(differenceABButton, gbc);
+
+        new SetController(setA, setB, this);
     }
 
-    private void addElementsToSetAndList() {
-        StringTokenizer st = new StringTokenizer(elemToAddTextField.getText());
-        List<String> tokens = new ArrayList<>();
-        while (st.hasMoreTokens()) {
-            tokens.add(st.nextToken());
-        }
-        if (setAButton.isSelected()) {
-            setA.addAll(tokens);
-            listA.setModel(setA.toJList().getModel());
+    public JButton getAddButton() {
+        return addButton;
+    }
+
+    public JButton getClearButton() {
+        return clearButton;
+    }
+
+    public JButton getRemoveButton() {
+        return removeButton;
+    }
+
+    public JButton getUniteButton() {
+        return uniteButton;
+    }
+
+    public JButton getIntersectButton() {
+        return intersectButton;
+    }
+
+    public JButton getDifferenceABButton() {
+        return differenceABButton;
+    }
+
+    public JTextField getElemToAddTextField() {
+        return elemToAddTextField;
+    }
+
+    public JTextField getResultTextField() {
+        return resultTextField;
+    }
+
+    public boolean isSetASelected() {
+        return setAButton.isSelected();
+    }
+
+    public void updateSetDisplay(Set<String> set) {
+        if (set == setA) {
+            listA.setModel(set.toJList().getModel());
         } else {
-            setB.addAll(tokens);
-            listB.setModel(setB.toJList().getModel());
+            listB.setModel(set.toJList().getModel());
         }
-        clearButton.setEnabled(true);
-    }
-
-    private void clearSetAndList() {
-        if (setAButton.isSelected()) {
-            setA.clear();
-            listA.setModel(setA.toJList().getModel());
-        } else {
-            setB.clear();
-            listB.setModel(setB.toJList().getModel());
-        }
-
-        isEmptySets();
-    }
-
-    private void isEmptySets() {
-        if (setA.isEmpty() && setB.isEmpty()) {
-            clearButton.setEnabled(false);
-            removeButton.setEnabled(false);
-        }
-    }
-
-    private void removeSelectedElementsFromLists() {
-        List<String> selectedValuesA = listA.getSelectedValuesList();
-        List<String> selectedValuesB = listB.getSelectedValuesList();
-
-        for (String value : selectedValuesA) {
-            setA.remove(value);
-        }
-        for (String value : selectedValuesB) {
-            setB.remove(value);
-        }
-
-        listA.setModel(setA.toJList().getModel());
-        listB.setModel(setB.toJList().getModel());
-
-        isEmptySets();
     }
 }
