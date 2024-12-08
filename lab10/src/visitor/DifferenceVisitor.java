@@ -1,8 +1,7 @@
-package model.visitors;
+package visitor;
 
 import iterator.Iterator;
 import model.Set;
-import visitor.Visitor;
 
 public class DifferenceVisitor<T> implements Visitor<T> {
 

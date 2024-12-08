@@ -1,5 +1,7 @@
 package app;
 
+import view.MyApplication;
+
 import java.awt.*;
 
 public class Main {

@@ -1,9 +1,9 @@
-package app;
+package view;
 
 import model.Set;
-import model.visitors.DifferenceVisitor;
-import model.visitors.IntersectionVisitor;
-import model.visitors.UnionVisitor;
+import visitor.DifferenceVisitor;
+import visitor.IntersectionVisitor;
+import visitor.UnionVisitor;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -40,7 +40,7 @@ public class MyApplication extends JFrame {
     JRadioButton setBButton;
     ButtonGroup setGroup;
 
-    MyApplication(String string) {
+    public MyApplication(String string) {
         super(string);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(new GridBagLayout());
