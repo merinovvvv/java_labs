@@ -69,7 +69,7 @@ public class Set<T> implements Aggregate<T>, Element<T> {
         return new JList<>(listModel);
     }
 
-    void add(T value) {
+    public void add(T value) {
         if (!list.contains(value)) {
             list.add(value);
         }
@@ -90,42 +90,42 @@ public class Set<T> implements Aggregate<T>, Element<T> {
         }
     }
 
-    public Set<T> unite(Set<? extends T> anotherSet) {
-        Set<T> unitedSet = new Set<>();
-        unitedSet.list.addAll(list);
-        Iterator<? extends T> iterator = anotherSet.createIterator();
-        while(!iterator.isDone()) {
-            if (!unitedSet.list.contains(iterator.currentItem())) {
-                unitedSet.list.add(iterator.currentItem());
-            }
-            iterator.next();
-        }
-        return unitedSet;
-    }
+//    public Set<T> unite(Set<? extends T> anotherSet) {
+//        Set<T> unitedSet = new Set<>();
+//        unitedSet.list.addAll(list);
+//        Iterator<? extends T> iterator = anotherSet.createIterator();
+//        while(!iterator.isDone()) {
+//            if (!unitedSet.list.contains(iterator.currentItem())) {
+//                unitedSet.list.add(iterator.currentItem());
+//            }
+//            iterator.next();
+//        }
+//        return unitedSet;
+//    }
 
-    public Set<T> intersect(Set<? extends T> anotherSet) {
-        Set<T> intersectionSet = new Set<>();
-        Iterator<? extends T> iterator = anotherSet.createIterator();
-        while(!iterator.isDone()) {
-            if (list.contains(iterator.currentItem())) {
-                intersectionSet.add(iterator.currentItem());
-            }
-            iterator.next();
-        }
-        return intersectionSet;
-    }
+//    public Set<T> intersect(Set<? extends T> anotherSet) {
+//        Set<T> intersectionSet = new Set<>();
+//        Iterator<? extends T> iterator = anotherSet.createIterator();
+//        while(!iterator.isDone()) {
+//            if (list.contains(iterator.currentItem())) {
+//                intersectionSet.add(iterator.currentItem());
+//            }
+//            iterator.next();
+//        }
+//        return intersectionSet;
+//    }
 
-    public Set<T> difference(Set<? extends T> anotherSet) {
-        Set<T> differenceSet = new Set<>();
-        Iterator<? extends T> iterator = createIterator();
-        while(!iterator.isDone()) {
-            if (!anotherSet.list.contains(iterator.currentItem())) {
-                differenceSet.add(iterator.currentItem());
-            }
-            iterator.next();
-        }
-        return differenceSet;
-    }
+//    public Set<T> difference(Set<? extends T> anotherSet) {
+//        Set<T> differenceSet = new Set<>();
+//        Iterator<? extends T> iterator = createIterator();
+//        while(!iterator.isDone()) {
+//            if (!anotherSet.list.contains(iterator.currentItem())) {
+//                differenceSet.add(iterator.currentItem());
+//            }
+//            iterator.next();
+//        }
+//        return differenceSet;
+//    }
 
     @Override
     public Iterator<T> createIterator() {
@@ -158,5 +158,9 @@ public class Set<T> implements Aggregate<T>, Element<T> {
     @Override
     public void accept(Visitor<T> visitor) {
         visitor.visit(this);
+    }
+
+    public List<T> getList() {
+        return list;
     }
 }

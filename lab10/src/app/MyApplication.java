@@ -1,6 +1,9 @@
 package app;
 
 import model.Set;
+import model.visitors.DifferenceVisitor;
+import model.visitors.IntersectionVisitor;
+import model.visitors.UnionVisitor;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -124,11 +127,23 @@ public class MyApplication extends JFrame {
 
         removeButton.addActionListener(_ -> removeSelectedElementsFromLists());
 
-        uniteButton.addActionListener(_ -> resultTextField.setText(setA.unite(setB).toString()));
+        uniteButton.addActionListener(_ -> {
+            UnionVisitor<String> unionVisitor = new UnionVisitor<>(setA);
+            setB.accept(unionVisitor);
+            resultTextField.setText(unionVisitor.getResult().toString());
+        });
 
-        intersectButton.addActionListener(_ -> resultTextField.setText(setA.intersect(setB).toString()));
+        intersectButton.addActionListener(_ -> {
+            IntersectionVisitor<String> intersectionVisitor = new IntersectionVisitor<>(setA);
+            setB.accept(intersectionVisitor);
+            resultTextField.setText(intersectionVisitor.getResult().toString());
+        });
 
-        differenceABButton.addActionListener(_ -> resultTextField.setText(setA.difference(setB).toString()));
+        differenceABButton.addActionListener(_ -> {
+            DifferenceVisitor<String> differenceVisitor = new DifferenceVisitor<>(setA);
+            setB.accept(differenceVisitor);
+            resultTextField.setText(differenceVisitor.getResult().toString());
+        });
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
