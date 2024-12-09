@@ -1,27 +1,19 @@
 package view;
 
 import controller.SetController;
-import model.Set;
-import visitor.DifferenceVisitor;
-import visitor.IntersectionVisitor;
-import visitor.UnionVisitor;
+import model.SetModel;
 
 import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import javax.swing.plaf.ColorUIResource;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.StringTokenizer;
 
-public class MyApplication extends JFrame {
+public class View extends JFrame {
 
     JList<String> listA;
     JList<String> listB;
 
-    Set<String> setA;
-    Set<String> setB;
+    SetModel<String> setA;
+    SetModel<String> setB;
     JTextField elemToAddTextField;
 
     JButton addButton;
@@ -41,7 +33,7 @@ public class MyApplication extends JFrame {
     JRadioButton setBButton;
     ButtonGroup setGroup;
 
-    public MyApplication(String string) {
+    public View(String string) {
         super(string);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(new GridBagLayout());
@@ -50,8 +42,8 @@ public class MyApplication extends JFrame {
         UIManager.put("Button.focus", new ColorUIResource(new Color(0, 0, 0, 0)));
         UIManager.put("RadioButton.focus", new ColorUIResource(new Color(0, 0, 0, 0)));
 
-        setA = new Set<>();
-        setB = new Set<>();
+        setA = new SetModel<>();
+        setB = new SetModel<>();
 
         listA = setA.toJList();
 
@@ -174,11 +166,19 @@ public class MyApplication extends JFrame {
         return resultTextField;
     }
 
+    public JList<String> getListA() {
+        return listA;
+    }
+
+    public JList<String> getListB() {
+        return listB;
+    }
+
     public boolean isSetASelected() {
         return setAButton.isSelected();
     }
 
-    public void updateSetDisplay(Set<String> set) {
+    public void updateSetDisplay(SetModel<String> set) {
         if (set == setA) {
             listA.setModel(set.toJList().getModel());
         } else {

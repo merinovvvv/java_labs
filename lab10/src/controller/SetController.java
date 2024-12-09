@@ -1,7 +1,7 @@
 package controller;
 
-import model.Set;
-import view.MyApplication;
+import model.SetModel;
+import view.View;
 import visitor.DifferenceVisitor;
 import visitor.IntersectionVisitor;
 import visitor.UnionVisitor;
@@ -13,11 +13,11 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 public class SetController {
-    private final Set<String> setA;
-    private final Set<String> setB;
-    private final MyApplication view;
+    private final SetModel<String> setA;
+    private final SetModel<String> setB;
+    private final View view;
 
-    public SetController(Set<String> setA, Set<String> setB, MyApplication view) {
+    public SetController(SetModel<String> setA, SetModel<String> setB, View view) {
         this.setA = setA;
         this.setB = setB;
         this.view = view;
@@ -48,6 +48,10 @@ public class SetController {
             setB.accept(differenceVisitor);
             this.view.getResultTextField().setText(differenceVisitor.getResult().toString());
         });
+
+        this.view.getListA().addListSelectionListener(_ -> updateRemoveButtonState());
+
+        this.view.getListB().addListSelectionListener(_ -> updateRemoveButtonState());
 
         this.view.getElemToAddTextField().getDocument().addDocumentListener(new DocumentListener() {
             @Override
@@ -87,7 +91,7 @@ public class SetController {
             this.view.updateSetDisplay(setB);
         }
         this.view.getClearButton().setEnabled(true);
-        updateButtonStates();
+        updateClearButtonState();
     }
 
     private void clearSetAndList() {
@@ -99,12 +103,12 @@ public class SetController {
             this.view.updateSetDisplay(setB);
         }
 
-        updateButtonStates();
+        updateClearButtonState();
     }
 
     private void removeSelectedElementsFromLists() {
-        List<String> selectedValuesA = setA.toJList().getSelectedValuesList(); //TODO bug
-        List<String> selectedValuesB = setB.toJList().getSelectedValuesList(); //TODO bug
+        List<String> selectedValuesA = this.view.getListA().getSelectedValuesList();
+        List<String> selectedValuesB = this.view.getListB().getSelectedValuesList();
 
         for (String value : selectedValuesA) {
             setA.remove(value);
@@ -116,13 +120,15 @@ public class SetController {
         this.view.updateSetDisplay(setA);
         this.view.updateSetDisplay(setB);
 
-        updateButtonStates();
+        updateClearButtonState();
     }
 
-    private void updateButtonStates() {
-        boolean isSetAEmpty = setA.isEmpty();
-        boolean isSetBEmpty = setB.isEmpty();
-        this.view.getClearButton().setEnabled(!isSetAEmpty || !isSetBEmpty);
-        this.view.getRemoveButton().setEnabled(!isSetAEmpty || !isSetBEmpty);
+    private void updateClearButtonState() {
+        this.view.getClearButton().setEnabled(!setA.isEmpty() || !setB.isEmpty());
+    }
+
+    private void updateRemoveButtonState() {
+        boolean isAnyFieldSelected = !this.view.getListA().isSelectionEmpty() || !this.view.getListB().isSelectionEmpty();
+        this.view.getRemoveButton().setEnabled(isAnyFieldSelected);
     }
 }

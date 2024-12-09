@@ -1,20 +1,20 @@
 package visitor;
 
 import iterator.Iterator;
-import model.Set;
+import model.SetModel;
 
 public class IntersectionVisitor<T> implements Visitor<T> {
 
-    private final Set<T> set;
-    private final Set<T> intersectionSet;
+    private final SetModel<T> set;
+    private final SetModel<T> intersectionSet;
 
-    public IntersectionVisitor(Set<T> set) {
+    public IntersectionVisitor(SetModel<T> set) {
         this.set = set;
-        intersectionSet = new Set<>();
+        intersectionSet = new SetModel<>();
     }
 
     @Override
-    public void visit(Set<? extends T> otherSet) {
+    public void visit(SetModel<? extends T> otherSet) {
         Iterator<? extends T> iterator = otherSet.createIterator();
         while(!iterator.isDone()) {
             if (set.getList().contains(iterator.currentItem())) {
@@ -24,7 +24,7 @@ public class IntersectionVisitor<T> implements Visitor<T> {
         }
     }
 
-    public Set<T> getResult() {
+    public SetModel<T> getResult() {
         return intersectionSet;
     }
 }

@@ -1,13 +1,13 @@
 package app;
 
-import view.MyApplication;
+import view.View;
 
 import java.awt.*;
 
 public class Main {
     public static void main(String[] args) {
-        MyApplication myApplication = new MyApplication("Set");
-        myApplication.setMinimumSize(new Dimension(500, 650));
-        myApplication.setVisible(true);
+        View view = new View("Set");
+        view.setMinimumSize(new Dimension(500, 650));
+        view.setVisible(true);
     }
 }

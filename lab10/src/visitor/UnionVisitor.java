@@ -1,20 +1,20 @@
 package visitor;
 
 import iterator.Iterator;
-import model.Set;
+import model.SetModel;
 
 public class UnionVisitor<T> implements Visitor<T> {
 
-    private final Set<T> set;
-    private final Set<T> unitedSet;
+    private final SetModel<T> set;
+    private final SetModel<T> unitedSet;
 
-    public UnionVisitor(Set<T> set) {
+    public UnionVisitor(SetModel<T> set) {
         this.set = set;
-        unitedSet = new Set<>();
+        unitedSet = new SetModel<>();
     }
 
     @Override
-    public void visit(Set<? extends T> otherSet) {
+    public void visit(SetModel<? extends T> otherSet) {
         unitedSet.getList().addAll(set.getList());
         Iterator<? extends T> iterator = otherSet.createIterator();
         while(!iterator.isDone()) {
@@ -25,7 +25,7 @@ public class UnionVisitor<T> implements Visitor<T> {
         }
     }
 
-    public Set<T> getResult() {
+    public SetModel<T> getResult() {
         return unitedSet;
     }
 }

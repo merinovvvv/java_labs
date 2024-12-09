@@ -1,7 +1,7 @@
 package visitor;
 
-import model.Set;
+import model.SetModel;
 
 public interface Visitor<T> {
-    void visit(Set<? extends T> set);
+    void visit(SetModel<? extends T> set);
 }

@@ -8,20 +8,20 @@ import visitor.Visitor;
 import javax.swing.*;
 import java.util.*;
 
-public class Set<T> implements Aggregate<T>, Element<T> {
+public class SetModel<T> implements Aggregate<T>, Element<T> {
 
     List<T> list;
 
-    public Set() {
+    public SetModel() {
         list = new ArrayList<>();
     }
 
-    public Set(Set<? extends T> otherSet) {
+    public SetModel(SetModel<? extends T> otherSet) {
         list = new ArrayList<>(otherSet.list);
     }
 
     @SafeVarargs
-    Set(T... elements) {
+    SetModel(T... elements) {
         list = new ArrayList<>();
         for (T element : elements) {
             if (!list.contains(element)) {
@@ -46,7 +46,7 @@ public class Set<T> implements Aggregate<T>, Element<T> {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Set<?> set = (Set<?>) o;
+        SetModel<?> set = (SetModel<?>) o;
         return Objects.equals(list, set.list);
     }
 

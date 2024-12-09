@@ -1,20 +1,20 @@
 package visitor;
 
 import iterator.Iterator;
-import model.Set;
+import model.SetModel;
 
 public class DifferenceVisitor<T> implements Visitor<T> {
 
-    private final Set<T> set;
-    private final Set<T> differenceSet;
+    private final SetModel<T> set;
+    private final SetModel<T> differenceSet;
 
-    public DifferenceVisitor(Set<T> set) {
+    public DifferenceVisitor(SetModel<T> set) {
         this.set = set;
-        differenceSet = new Set<>();
+        differenceSet = new SetModel<>();
     }
 
     @Override
-    public void visit(Set<? extends T> otherSet) {
+    public void visit(SetModel<? extends T> otherSet) {
         Iterator<? extends T> iterator = set.createIterator();
         while(!iterator.isDone()) {
             if (!otherSet.getList().contains(iterator.currentItem())) {
@@ -24,7 +24,7 @@ public class DifferenceVisitor<T> implements Visitor<T> {
         }
     }
 
-    public Set<T> getResult() {
+    public SetModel<T> getResult() {
         return differenceSet;
     }
 }
