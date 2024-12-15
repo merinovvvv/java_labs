@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<records>
+    <record>
+        <good>Televisions</good>
+        <country>Germany</country>
+        <volume>300</volume>
+    </record>
+    <record>
+        <good>Televisions</good>
+        <country>France</country>
+        <volume>250</volume>
+    </record>
+    <record>
+        <good>Fridges</good>
+        <country>Italy</country>
+        <volume>200</volume>
+    </record>
+    <record>
+        <good>Washing machines</good>
+        <country>Germany</country>
+        <volume>150</volume>
+    </record>
+    <record>
+        <good>Televisions</good>
+        <country>Spain</country>
+        <volume>100</volume>
+    </record>
+    <record>
+        <good>Washing machines</good>
+        <country>France</country>
+        <volume>300</volume>
+    </record>
+</records>

@@ -2,9 +2,7 @@ package app;
 
 import models.GoodsForExport;
 import models.ImportCountries;
-import strategies.InfoRetrievalStrategy;
-import strategies.LoopRetrievalStrategy;
-import strategies.StreamApiRetrievalStrategy;
+import strategies.*;
 import util.FileParse;
 
 import javax.swing.*;
@@ -23,6 +21,9 @@ public class MyApplication extends JFrame {
     JButton showInfoButton;
     JButton showInfoButtonStreamApi;
     JButton addInfoButton;
+    JButton openFileSaxButton;
+    JButton openFileDomButton;
+    JButton saveButton;
     JButton clearButton;
     JTextArea infoTextArea;
     JMenuBar menuBar;
@@ -30,7 +31,8 @@ public class MyApplication extends JFrame {
     ImportCountries importCountries;
     GoodsForExport goodsForExport;
 
-    InfoRetrievalStrategy strategy;
+    InfoRetrievalStrategy infoRetrievalStrategy;
+    ReadFromFileStrategy readFromFileStrategy;
 
     MyApplication(String string) {
         super(string);
@@ -74,13 +76,32 @@ public class MyApplication extends JFrame {
         addInfoButton = new JButton("add info");
         addInfoButton.setFont(largerFont);
 
-        showInfoButton.addActionListener(_ -> { //TODO Strategy init
-            strategy = new LoopRetrievalStrategy();
+        openFileSaxButton = new JButton("open file SAX");
+        openFileSaxButton.setFont(largerFont);
+
+        openFileDomButton = new JButton("open file DOM");
+        openFileDomButton.setFont(largerFont);
+
+        saveButton = new JButton("save info");
+        saveButton.setFont(largerFont);
+
+        openFileSaxButton.addActionListener(_ -> { //TODO is it ok to call readFile twice?
+            readFromFileStrategy = new ReadFromFileStrategySAX();
+            readFromFileStrategy.readFile(fileContentTextArea, fileContentMap, importCountries, goodsForExport);
+        });
+
+        openFileDomButton.addActionListener(_ -> {
+            readFromFileStrategy = new ReadFromFileStrategyDOM();
+            readFromFileStrategy.readFile(fileContentTextArea, fileContentMap, importCountries, goodsForExport);
+        });
+
+        showInfoButton.addActionListener(_ -> {
+            infoRetrievalStrategy = new LoopRetrievalStrategy();
             setShowInfoButtonCommon();
         });
 
-        showInfoButtonStreamApi.addActionListener(_ -> { //TODO Strategy init
-            strategy = new StreamApiRetrievalStrategy();
+        showInfoButtonStreamApi.addActionListener(_ -> {
+            infoRetrievalStrategy = new StreamApiRetrievalStrategy();
             setShowInfoButtonCommon();
         });
 
@@ -115,36 +136,47 @@ public class MyApplication extends JFrame {
 
         gbc.gridx = 0;
         gbc.gridy = 0;
+        this.add(openFileSaxButton, gbc);
+        gbc.gridx = 1;
+        this.add(openFileDomButton, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 1;
         gbc.gridwidth = 2;
         gbc.gridheight = 6;
         this.add(scrollPaneFileContent, gbc);
 
         gbc.gridheight = 1;
         gbc.gridwidth = 2;
-        gbc.gridy = 7;
+        gbc.gridy = 8;
         this.add(addInfoButton, gbc);
 
         gbc.gridwidth = 2;
         gbc.gridheight = 1;
-        gbc.gridy = 8;
-        this.add(clearButton, gbc);
         gbc.gridy = 9;
+        this.add(clearButton, gbc);
+
+        gbc.gridy = 10;
         gbc.gridwidth = 1;
         this.add(goodNameLabel, gbc);
         gbc.gridx = 1;
         this.add(goodNameTextField, gbc);
-        gbc.gridy = 10;
+
+        gbc.gridy = 11;
         gbc.gridx = 0;
         this.add(showInfoButton, gbc);
         gbc.gridx = 1;
         this.add(showInfoButtonStreamApi, gbc);
+
         gbc.gridx = 0;
-        gbc.gridy = 11;
+        gbc.gridy = 12;
         gbc.gridwidth = 2;
         gbc.gridheight = 6;
         this.add(scrollPaneInfo, gbc);
-        gbc.gridwidth = 1;
         gbc.gridheight = 1;
+
+        gbc.gridy = 18;
+        this.add(saveButton, gbc);
     }
 
     private void setShowInfoButtonCommon() {
@@ -174,7 +206,7 @@ public class MyApplication extends JFrame {
                 return;
             }
 
-            String result = strategy.getInfo(goodName, fileContentMap); //TODO Strategy usage
+            String result = infoRetrievalStrategy.getInfo(goodName, fileContentMap);
             infoTextArea.setText(result);
         } catch (ClassCastException | NullPointerException e) {
             JOptionPane.showMessageDialog(

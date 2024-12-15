@@ -15,6 +15,15 @@ import java.util.Map;
 
 public class FileParse {
 
+    public static File openXMLFile() {
+        JFileChooser fileChooser = new JFileChooser();
+        int result = fileChooser.showOpenDialog(null);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            return fileChooser.getSelectedFile();
+        }
+        return null;
+    }
+
     public static void openFile(JTextArea fileContentTextArea, Map<String, List<Object[]>> fileContentMap, ImportCountries importCountries, GoodsForExport goodsForExport) {
         JFileChooser fileChooser = new JFileChooser();
         int result = fileChooser.showOpenDialog(null);
@@ -33,7 +42,7 @@ public class FileParse {
         }
     }
 
-    static void loadFileContent(File file, JTextArea fileContentTextArea, Map<String, List<Object[]>> fileContentMap, ImportCountries importCountries, GoodsForExport goodsForExport) throws IOException{
+    private static void loadFileContent(File file, JTextArea fileContentTextArea, Map<String, List<Object[]>> fileContentMap, ImportCountries importCountries, GoodsForExport goodsForExport) throws IOException{
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))) {
             StringBuilder fileContent = new StringBuilder();
             String line;
@@ -55,7 +64,7 @@ public class FileParse {
         }
     }
 
-    static void fillMapStreamApi(JTextArea fileContentTextArea, Map<String, List<Object[]>> fileContentMap, ImportCountries importCountries, GoodsForExport goodsForExport) throws NumberFormatException{
+    public static void fillMapStreamApi(JTextArea fileContentTextArea, Map<String, List<Object[]>> fileContentMap, ImportCountries importCountries, GoodsForExport goodsForExport) throws NumberFormatException{
         fileContentMap.clear();
         String[] lines = fileContentTextArea.getText().split("\n");
         Arrays.stream(lines)
