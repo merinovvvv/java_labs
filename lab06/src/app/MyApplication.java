@@ -4,6 +4,7 @@ import models.GoodsForExport;
 import models.ImportCountries;
 import strategies.*;
 import util.FileParse;
+import util.XmlWork;
 
 import javax.swing.*;
 import javax.swing.plaf.ColorUIResource;
@@ -85,14 +86,14 @@ public class MyApplication extends JFrame {
         saveButton = new JButton("save info");
         saveButton.setFont(largerFont);
 
-        openFileSaxButton.addActionListener(_ -> { //TODO is it ok to call readFile twice?
+        openFileSaxButton.addActionListener(_ -> {
             readFromFileStrategy = new ReadFromFileStrategySAX();
-            readFromFileStrategy.readFile(fileContentTextArea, fileContentMap, importCountries, goodsForExport);
+            readFileCommon();
         });
 
         openFileDomButton.addActionListener(_ -> {
             readFromFileStrategy = new ReadFromFileStrategyDOM();
-            readFromFileStrategy.readFile(fileContentTextArea, fileContentMap, importCountries, goodsForExport);
+            readFileCommon();
         });
 
         showInfoButton.addActionListener(_ -> {
@@ -110,6 +111,8 @@ public class MyApplication extends JFrame {
                 addWindow.setMinimumSize(new Dimension(500, 200));
                 addWindow.setVisible(true);
         });
+
+        saveButton.addActionListener(_ -> XmlWork.saveToXML(infoTextArea));
 
         clearButton.addActionListener(_ -> {
             fileContentTextArea.setText("");
@@ -177,6 +180,10 @@ public class MyApplication extends JFrame {
 
         gbc.gridy = 18;
         this.add(saveButton, gbc);
+    }
+
+    private void readFileCommon() {
+        readFromFileStrategy.readFile(fileContentTextArea, fileContentMap, importCountries, goodsForExport);
     }
 
     private void setShowInfoButtonCommon() {

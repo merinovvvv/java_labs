@@ -6,6 +6,7 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 import util.FileParse;
+import util.XmlWork;
 
 import javax.swing.*;
 import javax.xml.parsers.SAXParser;
@@ -17,7 +18,7 @@ import java.util.Map;
 public class ReadFromFileStrategySAX implements ReadFromFileStrategy {
     @Override
     public void readFile(JTextArea fileContentTextArea, Map<String, List<Object[]>> fileContentMap, ImportCountries importCountries, GoodsForExport goodsForExport) {
-        File file = FileParse.openXMLFile();
+        File file = XmlWork.openXMLFile();
         if (file == null) {
             return;
         }

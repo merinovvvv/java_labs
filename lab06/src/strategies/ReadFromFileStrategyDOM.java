@@ -7,6 +7,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import util.FileParse;
+import util.XmlWork;
 
 import javax.swing.*;
 import javax.xml.parsers.DocumentBuilder;
@@ -19,7 +20,7 @@ public class ReadFromFileStrategyDOM implements ReadFromFileStrategy {
     @Override
     public void readFile(JTextArea fileContentTextArea, Map<String, List<Object[]>> fileContentMap, ImportCountries importCountries, GoodsForExport goodsForExport) {
         try {
-            File inputFile = FileParse.openXMLFile();
+            File inputFile = XmlWork.openXMLFile();
             DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = documentBuilderFactory.newDocumentBuilder();
             Document doc = builder.parse(inputFile);
