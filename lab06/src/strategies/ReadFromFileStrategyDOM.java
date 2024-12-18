@@ -13,6 +13,7 @@ import javax.swing.*;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -35,10 +36,11 @@ public class ReadFromFileStrategyDOM implements ReadFromFileStrategy {
                     String good = element.getElementsByTagName("good").item(0).getTextContent();
                     String volume = element.getElementsByTagName("volume").item(0).getTextContent();
                     fileContentTextArea.append(good + ", " + country + ", " + volume + "\n");
+
+                    fileContentMap.computeIfAbsent(good, k -> new ArrayList<>())
+                            .add(new Object[]{country, Integer.parseInt(volume)});
                 }
             }
-
-            FileParse.fillMapStreamApi(fileContentTextArea, fileContentMap, importCountries, goodsForExport);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(
                     null,

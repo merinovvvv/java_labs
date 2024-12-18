@@ -12,6 +12,7 @@ import javax.swing.*;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -59,6 +60,8 @@ public class ReadFromFileStrategySAX implements ReadFromFileStrategy {
             @Override
             public void endElement(String uri, String localName, String qualifiedName) throws SAXException {
                 if (qualifiedName.equalsIgnoreCase("record")) {
+                    fileContentMap.computeIfAbsent(good, k -> new ArrayList<>())
+                            .add(new Object[]{country, Integer.parseInt(volume)});
                     fileContentTextArea.append(good + ", " + country + ", " + volume + "\n");
                 }
             }
@@ -68,8 +71,7 @@ public class ReadFromFileStrategySAX implements ReadFromFileStrategy {
         try {
             SAXParser parser = factory.newSAXParser();
             parser.parse(filename, handler);
-
-            FileParse.fillMapStreamApi(fileContentTextArea, fileContentMap, importCountries, goodsForExport);
+            //FileParse.fillMapStreamApi(fileContentTextArea, fileContentMap, importCountries, goodsForExport);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(
                     null,
