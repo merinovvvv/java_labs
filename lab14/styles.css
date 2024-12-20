@@ -1,0 +1,80 @@
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: #f9f9f9;
+}
+
+header {
+    text-align: center;
+    padding: 20px; /*добавляет внутренние отступы по всем сторонам (20px)*/
+    background-color: #282c34;
+    color: white;
+}
+
+main {
+    display: flex; /*задаёт блоку гибкий макет (flexbox), чтобы можно было управлять расположением содержимого*/
+    justify-content: center; /*horiz*/
+    align-items: center; /*vert*/
+    height: 70vh;
+    text-align: center;
+}
+
+.opened-image {
+    margin-bottom: 20px; /* Устанавливает отступ снизу в 20 пикселей */
+}
+
+.image-container {
+    display: flex;
+    justify-content: center; /* выравнивает изображение по центру по горизонтали */
+    align-items: center;    /* выравнивает изображение по центру по вертикали */
+}
+
+.image-container img {
+    margin-top: 70px;
+    width: 50%;
+}
+
+.container {
+    max-width: 800px; /* ограничиваем ширину для удобства чтения */
+    margin: 0 auto; /* центрирует контейнер горизонтально */
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px; /* закругляет углы блока на 10px */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* добавляет лёгкую тень для эффекта "приподнятости" */
+}
+
+.menu {
+    list-style: none; /*убирает маркеры списка*/
+    padding: 0;
+    margin: 20px auto; /* задаёт отступ сверху и снизу (20px) и центрирует блок горизонтально*/
+    display: flex; /* делает пункты меню гибкими для управления их расположением.*/
+    justify-content: center; /*центрирует пункты меню*/
+    gap: 20px; /*добавляет промежутки между пунктами*/
+}
+
+
+/*Стили для ссылок в меню */
+.menu a {
+    text-decoration: none; /*убирает подчёркивание текста*/
+    font-size: 1.2rem;
+    color: white;
+    background: #0066cc;
+    padding: 10px 20px; /*добавляет отступы внутри кнопки*/
+    border-radius: 5px;
+    transition: all 0.3s ease; /*добавляет плавный переход для всех свойств при наведении*/
+}
+
+.menu a:hover {
+    background: #004c99;
+    transform: scale(1.1);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+
+.center-image {
+    max-width: 80%;
+    max-height: 100%;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}

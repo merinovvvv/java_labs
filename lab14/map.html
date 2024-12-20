@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Карта</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Карта</h1>
+    </header>
+    <div class="image-container">
+        <img src="img/vs.jpg" usemap="#imagemap" alt="Map"> <!--второй тег указывает, что изображение связано с картой <map name="imagemap">-->
+    </div>
+    <map name="imagemap">
+        <area shape="rect" coords="0,0,320,720" href="https://mak.by" alt="mak" target="_blank"> <!--area определяет кликабельные области на изображении-->
+        <area shape="rect" coords="320,0,640,720" href="https://www.kfc.by" alt="kfc" target="_blank">
+    </map>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Форма студента</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <header>
+        <h1>Форма для ввода данных студента</h1>
+    </header>
+    <div class="container">
+        <form> <!--основной тег формы, внутри которого располагаются элементы ввода данных-->
+            <label for="name">Имя студента:</label><!--метка для поля ввода имени. Атрибут for связывает метку с полем ввода по идентификатору name-->
+            <input type="text" id="name" name="name" required><br><br><!--cоздаёт текстовое поле для ввода имени-->
+
+            <label for="age">Возраст:</label>
+            <input type="number" id="age" name="age" max="100" required><br><br> <!--числовое поле-->
+
+            <label>Пол:</label>
+            <input type="radio" id="male" name="gender" value="male"> <!--радиобаттон-->
+            <label for="male">Мужской</label>
+
+            <input type="radio" id="female" name="gender" value="female">
+            <label for="female">Женский</label><br><br>
+
+            <label for="course">Курс:</label>
+            <select id="course" name="course"><!--cоздаёт выпадающий список.-->
+                <option value="1">1 курс</option><!--элементы списка-->
+                <option value="2">2 курс</option>
+                <option value="3">3 курс</option>
+                <option value="4">4 курс</option>
+            </select><br><br>
+
+            <label for="photo">Загрузить фотографию:</label>
+            <input type="file" id="photo" name="photo" accept="image/*" onchange=previewImage(event)> <!-- поле для выбора файла. Атрибут accept="image/*" ограничивает выбор файлов изображениями. Атрибут onchange="previewImage(event)" вызывает функцию previewImage при изменении выбранного файла (например, при загрузке фотографии)-->
+            <br><br>
+            <img id="imagePreview" src="" alt="Image preview" style="max-width: 200px; display: none;" class="opened-image">
+            
+            <button type="submit" style="background-image: url('ok.png');">ОК</button>
+            <button type="reset" style="background-image: url('cancel.png');">Отмена</button>
+        </form>
+    </div>
+    <script src="showImage.js"></script>
+</body>
+
+</html>
